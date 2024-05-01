@@ -14,113 +14,141 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { styled } from "@mui/system";
+import axios from "axios";
 
 const FormGrid = styled("div")(() => ({
   display: "flex",
   flexDirection: "column",
 }));
 
-const isEmail = (email) =>
-  /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email);
+// const isEmail = (email) =>
+//   /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email);
 
 export default function Register() {
-  const [showPassword, setShowPassword] = React.useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
+  // Real
+  const [inputs, setInputs] = React.useState({
+    fullName: "",
+    userName: "",
+    email: "",
+    password: "",
+  });
+
+  const [err, setErr] = React.useState(false);
+
+  const handleChange = (e) => {
+    setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleClick = async (e) => {
+    e.preventDefault();
+
+    try {
+      await axios.post("http://localhost:8800/api/auth/register", inputs);
+    } catch (err) {
+      setErr(err.response.data);
+    }
+  };
+
+  console.log(err);
+
+  // Boleh delete nanti
+  // const [showPassword, setShowPassword] = React.useState(false);
+  // const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
 
   // Input
-  const [fullName, setfullName] = React.useState("");
-  const [userName, setUserName] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [confirmPassword, setConfirmPassword] = React.useState("");
+  // const [fullName, setfullName] = React.useState("");
+  // const [userName, setUserName] = React.useState("");
+  // const [email, setEmail] = React.useState("");
+  // const [password, setPassword] = React.useState("");
+  // const [confirmPassword, setConfirmPassword] = React.useState("");
   //   const handleUsername = (event) => {};
 
   // Input Error
-  const [emailError, setEmailError] = React.useState(false);
-  const [passwordError, setPasswordError] = React.useState(false);
-  const [confirmPasswordError, setConfirmPasswordError] = React.useState(false);
+  // const [emailError, setEmailError] = React.useState(false);
+  // const [passwordError, setPasswordError] = React.useState(false);
+  // const [confirmPasswordError, setConfirmPasswordError] = React.useState(false);
 
   // Form validity
-  const [formValid, setFormValid] = React.useState();
-  const [success, setSuccess] = React.useState();
+  // const [formValid, setFormValid] = React.useState();
+  // const [success, setSuccess] = React.useState();
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-  const handleClickShowConfirmPassword = () =>
-    setShowConfirmPassword((show) => !show);
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
+  // const handleClickShowPassword = () => setShowPassword((show) => !show);
+  // const handleClickShowConfirmPassword = () =>
+  //   setShowConfirmPassword((show) => !show);
+  // const handleMouseDownPassword = (event) => {
+  //   event.preventDefault();
+  // };
 
-  const handleEmail = () => {
-    console.log(isEmail(email));
-    if (!isEmail(email)) {
-      setEmailError(true);
-      return;
-    }
+  // const handleEmail = () => {
+  //   console.log(isEmail(email));
+  //   if (!isEmail(email)) {
+  //     setEmailError(true);
+  //     return;
+  //   }
 
-    setEmailError(false);
-  };
+  //   setEmailError(false);
+  // };
 
-  const handlePassword = () => {
-    if (!password || password.length < 6 || password.length > 20) {
-      setPasswordError(true);
-      return;
-    }
+  // const handlePassword = () => {
+  //   if (!password || password.length < 6 || password.length > 20) {
+  //     setPasswordError(true);
+  //     return;
+  //   }
 
-    setPasswordError(false);
-  };
+  //   setPasswordError(false);
+  // };
 
-  const handleConfirmPassword = () => {
-    if (password !== confirmPassword) {
-      setConfirmPasswordError(true);
-      return;
-    }
+  // const handleConfirmPassword = () => {
+  //   if (password !== confirmPassword) {
+  //     setConfirmPasswordError(true);
+  //     return;
+  //   }
 
-    setConfirmPasswordError(false);
-  };
+  //   setConfirmPasswordError(false);
+  // };
 
-  const handleSubmit = () => {
-    setSuccess(null);
-    //First of all Check for Errors
+  // const handleSubmit = () => {
+  //   setSuccess(null);
+  //   //First of all Check for Errors
 
-    // IF username error is true
-    //   if (usernameError || !usernameInput) {
-    //     setFormValid(
-    //       "Username is set btw 5 - 15 characters long. Please Re-Enter"
-    //     );
-    //     return;
-    //   }
+  //   // IF username error is true
+  //   //   if (usernameError || !usernameInput) {
+  //   //     setFormValid(
+  //   //       "Username is set btw 5 - 15 characters long. Please Re-Enter"
+  //   //     );
+  //   //     return;
+  //   //   }
 
-    // If Email error is true
-    if (emailError || !email) {
-      setFormValid("Email is Invalid. Please Re-Enter");
-      return;
-    }
+  //   // If Email error is true
+  //   if (emailError || !email) {
+  //     setFormValid("Email is Invalid. Please Re-Enter");
+  //     return;
+  //   }
 
-    // If Password error is true
-    if (passwordError || !password) {
-      setFormValid(
-        "Password is set btw 6 - 20 characters long. Please Re-Enter."
-      );
-      return;
-    }
+  //   // If Password error is true
+  //   if (passwordError || !password) {
+  //     setFormValid(
+  //       "Password is set btw 6 - 20 characters long. Please Re-Enter."
+  //     );
+  //     return;
+  //   }
 
-    if (confirmPasswordError || !confirmPassword) {
-      setFormValid("Password does not match. Please Re-Enter");
-      return;
-    }
-    setFormValid(null);
+  //   if (confirmPasswordError || !confirmPassword) {
+  //     setFormValid("Password does not match. Please Re-Enter");
+  //     return;
+  //   }
+  //   setFormValid(null);
 
-    // Proceed to use the information passed
-    console.log("Full Name : " + fullName);
-    console.log("Username : " + userName);
-    console.log("Email : " + email);
-    console.log("Password : " + password);
-    console.log("Confirm Password : " + confirmPassword);
+  //   // Proceed to use the information passed
+  //   console.log("Full Name : " + fullName);
+  //   console.log("Username : " + userName);
+  //   console.log("Email : " + email);
+  //   console.log("Password : " + password);
+  //   console.log("Confirm Password : " + confirmPassword);
 
-    //Show Successfull Submittion
-    setSuccess("Form Submitted Successfully");
-  };
+  //   //Show Successfull Submittion
+  //   setSuccess("Form Submitted Successfully");
+  // };
 
   return (
     <Grid
@@ -179,13 +207,15 @@ export default function Register() {
               <FormLabel>Full Name</FormLabel>
               <OutlinedInput
                 id="fullName"
+                name="fullName"
                 autoComplete="fullName"
                 placeholder=""
                 required
-                value={fullName}
-                onChange={(event) => {
-                  setfullName(event.target.value);
-                }}
+                // value={fullName}
+                onChange={handleChange}
+                // onChange={(event) => {
+                //   setfullName(event.target.value);
+                // }}
                 sx={{ backgroundColor: "white", width: "100%" }}
               />
             </FormGrid>
@@ -195,13 +225,15 @@ export default function Register() {
               <FormLabel>Username</FormLabel>
               <OutlinedInput
                 id="username"
+                name="userName"
                 autoComplete="username"
                 placeholder=""
                 required
-                value={userName}
-                onChange={(event) => {
-                  setUserName(event.target.value);
-                }}
+                // value={userName}
+                onChange={handleChange}
+                // onChange={(event) => {
+                //   setUserName(event.target.value);
+                // }}
                 sx={{ backgroundColor: "white", width: "100%" }}
               />
             </FormGrid>
@@ -211,15 +243,17 @@ export default function Register() {
               <FormLabel>Email</FormLabel>
               <OutlinedInput
                 id="Email"
+                name="email"
                 autoComplete="Email"
                 placeholder=""
                 required
-                value={email}
-                error={emailError}
-                onBlur={handleEmail}
-                onChange={(event) => {
-                  setEmail(event.target.value);
-                }}
+                // value={email}
+                onChange={handleChange}
+                // error={emailError}
+                // onBlur={handleEmail}
+                // onChange={(event) => {
+                //   setEmail(event.target.value);
+                // }}
                 sx={{ backgroundColor: "white", width: "100%" }}
               />
             </FormGrid>
@@ -229,28 +263,30 @@ export default function Register() {
               <FormLabel>Password</FormLabel>
               <OutlinedInput
                 id="password"
+                name="password"
                 autoComplete="password"
                 placeholder=""
                 required
-                value={password}
-                error={passwordError}
-                onBlur={handlePassword}
-                type={showPassword ? "text" : "password"}
-                onChange={(event) => {
-                  setPassword(event.target.value);
-                }}
+                // value={password}
+                onChange={handleChange}
+                // error={passwordError}
+                // onBlur={handlePassword}
+                // type={showPassword ? "text" : "password"}
+                // onChange={(event) => {
+                //   setPassword(event.target.value);
+                // }}
                 sx={{ backgroundColor: "white", width: "100%" }}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                }
+                // endAdornment={
+                //   <InputAdornment position="end">
+                //     <IconButton
+                //       aria-label="toggle password visibility"
+                //       onClick={handleClickShowPassword}
+                //       onMouseDown={handleMouseDownPassword}
+                //     >
+                //       {showPassword ? <VisibilityOff /> : <Visibility />}
+                //     </IconButton>
+                //   </InputAdornment>
+                // }
               />
             </FormGrid>
           </Box>
@@ -262,25 +298,26 @@ export default function Register() {
                 autoComplete="confirmPassword"
                 placeholder=""
                 required
-                value={confirmPassword}
-                error={confirmPasswordError}
-                onBlur={handleConfirmPassword}
-                type={showConfirmPassword ? "text" : "password"}
-                onChange={(event) => {
-                  setConfirmPassword(event.target.value);
-                }}
+                // value={confirmPassword}
+                onChange={handleChange}
+                // error={confirmPasswordError}
+                // onBlur={handleConfirmPassword}
+                // type={showConfirmPassword ? "text" : "password"}
+                // onChange={(event) => {
+                //   setConfirmPassword(event.target.value);
+                // }}
                 sx={{ backgroundColor: "white", width: "100%" }}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowConfirmPassword}
-                      onMouseDown={handleMouseDownPassword}
-                    >
-                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                }
+                // endAdornment={
+                //   <InputAdornment position="end">
+                //     <IconButton
+                //       aria-label="toggle password visibility"
+                //       onClick={handleClickShowConfirmPassword}
+                //       onMouseDown={handleMouseDownPassword}
+                //     >
+                //       {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                //     </IconButton>
+                //   </InputAdornment>
+                // }
               />
             </FormGrid>
           </Box>
@@ -298,11 +335,11 @@ export default function Register() {
                 backgroundColor: "#14506E",
               },
             }}
-            onClick={handleSubmit}
+            onClick={handleClick}
           >
             Register
           </Button>
-          {formValid && (
+          {/* {formValid && (
             <Stack sx={{ width: "100%", paddingTop: "10px" }} spacing={2}>
               <Alert severity="error" size="small">
                 {formValid}
@@ -316,7 +353,7 @@ export default function Register() {
                 {success}
               </Alert>
             </Stack>
-          )}
+          )} */}
           <Grid item>
             <Typography>
               I have an account

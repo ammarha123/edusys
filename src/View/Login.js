@@ -16,6 +16,8 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { styled } from "@mui/system";
+import { AuthContext } from "../context/authContext";
+import axios from "axios";
 
 const FormGrid = styled("div")(() => ({
   display: "flex",
@@ -23,63 +25,89 @@ const FormGrid = styled("div")(() => ({
 }));
 
 export default function Login() {
-  const [showPassword, setShowPassword] = React.useState(false);
+  const [inputs, setInputs] = React.useState({
+    userName: "",
+    password: "",
+  });
 
-  // Input
-  const [userName, setUserName] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  //   const handleUsername = (event) => {};
+  const [err, setErr] = React.useState(false);
 
-  // Input error
-  const [usernameError, setUsernameError] = React.useState(false);
-  const [passwordError, setPasswordError] = React.useState(false);
-
-  // Form validity
-  const [formValid, setFormValid] = React.useState();
-  const [success, setSuccess] = React.useState();
-
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
+  const handleChange = (e) => {
+    setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handlePassword = () => {
-    if (!password || password.length < 6 || password.length > 20) {
-      setPasswordError(true);
-      return;
+  // console.log(inputs);
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    try {
+      await axios.post("http://localhost:8800/api/auth/login", inputs);
+    } catch (err) {
+      setErr(err.response.data);
     }
-
-    setPasswordError(false);
   };
 
-  const handleSubmit = () => {
-    setSuccess(null);
-    //First of all Check for Errors
+  console.log(err);
 
-    // IF username error is true
-    //   if (usernameError || !usernameInput) {
-    //     setFormValid(
-    //       "Username is set btw 5 - 15 characters long. Please Re-Enter"
-    //     );
-    //     return;
-    //   }
+  // Delete
+  // const [showPassword, setShowPassword] = React.useState(false);
 
-    // If Password error is true
-    if (passwordError || !password) {
-      setFormValid(
-        "Password is set btw 6 - 20 characters long. Please Re-Enter."
-      );
-      return;
-    }
+  // // Input
+  // const [userName, setUserName] = React.useState("");
+  // const [password, setPassword] = React.useState("");
+  // //   const handleUsername = (event) => {};
 
-    setFormValid(null);
-    // Proceed to use the information passed
-    console.log("Username : " + userName);
-    console.log("Password : " + password);
+  // // Input error
+  // const [usernameError, setUsernameError] = React.useState(false);
+  // const [passwordError, setPasswordError] = React.useState(false);
 
-    //Show Successfull Submittion
-    setSuccess("Form Submitted Successfully");
-  };
+  // // Form validity
+  // const [formValid, setFormValid] = React.useState();
+  // const [success, setSuccess] = React.useState();
+
+  // const handleClickShowPassword = () => setShowPassword((show) => !show);
+  // const handleMouseDownPassword = (event) => {
+  //   event.preventDefault();
+  // };
+
+  // const handlePassword = () => {
+  //   if (!password || password.length < 6 || password.length > 20) {
+  //     setPasswordError(true);
+  //     return;
+  //   }
+
+  //   setPasswordError(false);
+  // };
+
+  // const handleSubmit = () => {
+  //   setSuccess(null);
+  //   //First of all Check for Errors
+
+  //   // IF username error is true
+  //   //   if (usernameError || !usernameInput) {
+  //   //     setFormValid(
+  //   //       "Username is set btw 5 - 15 characters long. Please Re-Enter"
+  //   //     );
+  //   //     return;
+  //   //   }
+
+  //   // If Password error is true
+  //   if (passwordError || !password) {
+  //     setFormValid(
+  //       "Password is set btw 6 - 20 characters long. Please Re-Enter."
+  //     );
+  //     return;
+  //   }
+
+  //   setFormValid(null);
+  //   // Proceed to use the information passed
+  //   console.log("Username : " + userName);
+  //   console.log("Password : " + password);
+
+  //   //Show Successfull Submittion
+  //   setSuccess("Form Submitted Successfully");
+  // };
 
   return (
     <Grid
@@ -138,13 +166,15 @@ export default function Login() {
               <FormLabel htmlFor="username">Username</FormLabel>
               <OutlinedInput
                 id="username"
+                name="userName"
                 autoComplete="username"
                 placeholder=""
                 required
-                value={userName}
-                onChange={(event) => {
-                  setUserName(event.target.value);
-                }}
+                onChange={handleChange}
+                // value={userName}
+                // onChange={(event) => {
+                //   setUserName(event.target.value);
+                // }}
                 sx={{ backgroundColor: "white", width: "100%" }}
               />
             </FormGrid>
@@ -154,28 +184,30 @@ export default function Login() {
               <FormLabel htmlFor="password">Password</FormLabel>
               <OutlinedInput
                 id="password"
+                name="password"
                 autoComplete="password"
                 placeholder=""
                 required
-                value={password}
-                error={passwordError}
-                onBlur={handlePassword}
-                type={showPassword ? "text" : "password"}
-                onChange={(event) => {
-                  setPassword(event.target.value);
-                }}
+                onChange={handleChange}
+                // value={password}
+                // error={passwordError}
+                // onBlur={handlePassword}
+                // type={showPassword ? "text" : "password"}
+                // onChange={(event) => {
+                //   setPassword(event.target.value);
+                // }}
                 sx={{ backgroundColor: "white", width: "100%" }}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                }
+                // endAdornment={
+                //   <InputAdornment position="end">
+                //     <IconButton
+                //       aria-label="toggle password visibility"
+                //       onClick={handleClickShowPassword}
+                //       onMouseDown={handleMouseDownPassword}
+                //     >
+                //       {showPassword ? <VisibilityOff /> : <Visibility />}
+                //     </IconButton>
+                //   </InputAdornment>
+                // }
               />
             </FormGrid>
           </Box>
@@ -205,11 +237,11 @@ export default function Login() {
                 backgroundColor: "#14506E",
               },
             }}
-            onClick={handleSubmit}
+            onClick={handleLogin}
           >
             Login
           </Button>
-          {formValid && (
+          {/* {formValid && (
             <Stack sx={{ width: "100%", paddingTop: "10px" }} spacing={2}>
               <Alert severity="error" size="small">
                 {formValid}
@@ -223,7 +255,7 @@ export default function Login() {
                 {success}
               </Alert>
             </Stack>
-          )}
+          )} */}
           <Grid item xs>
             <Link href="#" variant="body2">
               Forgot password?
