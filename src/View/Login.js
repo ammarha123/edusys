@@ -1,149 +1,242 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Checkbox from '@mui/material/Checkbox';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormLabel from '@mui/material/FormLabel';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import Typography from '@mui/material/Typography';
-import { Grid } from '@mui/material';
-import Button from '@mui/material/Button';
+import * as React from "react";
+import Box from "@mui/material/Box";
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormLabel from "@mui/material/FormLabel";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import Typography from "@mui/material/Typography";
+import { Grid } from "@mui/material";
+import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
+import Alert from "@mui/material/Alert";
 import { Link } from "react-router-dom";
-import backgroundImage from "/Users/fadhlina/personalised-chatbot/src/Components/chatbot-background.jpg"
+import backgroundImage from "../Components/chatbot-background.jpg";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { styled } from "@mui/system";
 
-import { styled } from '@mui/system';
-
-const FormGrid = styled('div')(() => ({
-    display: 'flex',
-    flexDirection: 'column',
+const FormGrid = styled("div")(() => ({
+  display: "flex",
+  flexDirection: "column",
 }));
 
 export default function Login() {
-    const [userName, setUserName] = React.useState('');
-    const handleUsername = (event) => {
+  const [showPassword, setShowPassword] = React.useState(false);
 
-    };
+  // Input
+  const [userName, setUserName] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  //   const handleUsername = (event) => {};
 
-    return (
-        <Grid
-            container
-            component="main"
-            sx={{
-                height: '100vh',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'flex-start',
-                paddingLeft: '200px',
-                backgroundImage: `url(${backgroundImage})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat',
-            }}
+  // Input error
+  const [usernameError, setUsernameError] = React.useState(false);
+  const [passwordError, setPasswordError] = React.useState(false);
+
+  // Form validity
+  const [formValid, setFormValid] = React.useState();
+  const [success, setSuccess] = React.useState();
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
+  const handlePassword = () => {
+    if (!password || password.length < 6 || password.length > 20) {
+      setPasswordError(true);
+      return;
+    }
+
+    setPasswordError(false);
+  };
+
+  const handleSubmit = () => {
+    setSuccess(null);
+    //First of all Check for Errors
+
+    // IF username error is true
+    //   if (usernameError || !usernameInput) {
+    //     setFormValid(
+    //       "Username is set btw 5 - 15 characters long. Please Re-Enter"
+    //     );
+    //     return;
+    //   }
+
+    // If Password error is true
+    if (passwordError || !password) {
+      setFormValid(
+        "Password is set btw 6 - 20 characters long. Please Re-Enter."
+      );
+      return;
+    }
+
+    setFormValid(null);
+    // Proceed to use the information passed
+    console.log("Username : " + userName);
+    console.log("Password : " + password);
+
+    //Show Successfull Submittion
+    setSuccess("Form Submitted Successfully");
+  };
+
+  return (
+    <Grid
+      container
+      component="main"
+      sx={{
+        height: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "flex-start",
+        paddingLeft: "200px",
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
+      <Grid
+        item
+        xs={12}
+        sm={2}
+        md={4}
+        elevation={4}
+        sx={{
+          height: "479px",
+          width: "479px",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          backgroundColor: "#53A2BE", // Set the background color
+          borderRadius: 3,
+        }}
+      >
+        <Box
+          sx={{
+            my: 8,
+            mx: 4,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            borderRadius: 1,
+          }}
         >
-            <Grid
-                item
-                xs={12} sm={2} md={4}
-                elevation={4}
-                sx={{
-                    height: '479px',
-                    width: '479px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    backgroundColor: '#53A2BE', // Set the background color
-                    borderRadius: 3,
+          <Typography component="h1" variant="h5" padding="20px" margin="10px">
+            Welcome Back!
+          </Typography>
+
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              width: "100%",
+            }}
+          >
+            <FormGrid sx={{ flexGrow: 1 }}>
+              <FormLabel htmlFor="username">Username</FormLabel>
+              <OutlinedInput
+                id="username"
+                autoComplete="username"
+                placeholder=""
+                required
+                value={userName}
+                onChange={(event) => {
+                  setUserName(event.target.value);
                 }}
-            >
-                <Box
-                    sx={{
-                        my: 8,
-                        mx: 4,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        borderRadius: 1,
-                    }}
-                >
-                    <Typography component="h1" variant="h5" padding='20px' margin='10px'>
-                        Welcome Back!
-                    </Typography>
-
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            width: '100%',
-
-                        }}
+                sx={{ backgroundColor: "white", width: "100%" }}
+              />
+            </FormGrid>
+          </Box>
+          <Box sx={{ display: "flex", width: "100%", padding: "10px" }}>
+            <FormGrid sx={{ flexGrow: 1 }}>
+              <FormLabel htmlFor="password">Password</FormLabel>
+              <OutlinedInput
+                id="password"
+                autoComplete="password"
+                placeholder=""
+                required
+                value={password}
+                error={passwordError}
+                onBlur={handlePassword}
+                type={showPassword ? "text" : "password"}
+                onChange={(event) => {
+                  setPassword(event.target.value);
+                }}
+                sx={{ backgroundColor: "white", width: "100%" }}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
                     >
-                        <FormGrid sx={{ flexGrow: 1 }}>
-                            <FormLabel htmlFor="username" >
-                                Username
-                            </FormLabel>
-                            <OutlinedInput
-                                id="username"
-                                autoComplete="username"
-                                placeholder=""
-                                required
-                                value={userName}
-                                onChange={handleUsername}
-                                sx={{ backgroundColor: 'white', width: '100%' }}
-                            />
-                        </FormGrid>
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+            </FormGrid>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              width: "100%",
+              justifyContent: "flex-start",
+            }}
+          >
+            <FormControlLabel
+              control={<Checkbox name="saveInfo" />}
+              label="Remember me"
+            />
+          </Box>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{
+              mt: 2,
+              mb: 2,
+              height: "63px",
+              width: "243px",
+              backgroundColor: "#176087",
+              "&:hover": {
+                backgroundColor: "#14506E",
+              },
+            }}
+            onClick={handleSubmit}
+          >
+            Login
+          </Button>
+          {formValid && (
+            <Stack sx={{ width: "100%", paddingTop: "10px" }} spacing={2}>
+              <Alert severity="error" size="small">
+                {formValid}
+              </Alert>
+            </Stack>
+          )}
 
-                    </Box>
-                    <Box sx={{ display: 'flex', width: '100%', padding: '10px' }}>
-                        <FormGrid sx={{ flexGrow: 1 }}>
-                            <FormLabel htmlFor="password" >
-                                Password
-                            </FormLabel>
-                            <OutlinedInput
-                                id="password"
-                                autoComplete="password"
-                                placeholder=""
-                                required
-                                sx={{ backgroundColor: 'white', width: '100%' }}
-                            />
-                        </FormGrid>
-
-                    </Box>
-                    <Box sx={{ display: 'flex', width: '100%', justifyContent: 'flex-start' }}>
-                        <FormControlLabel
-                            control={<Checkbox name="saveInfo" />}
-                            label="Remember me"
-                        />
-                    </Box>
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        sx={{
-                            mt: 2,
-                            mb: 2,
-                            height: '63px',
-                            width: '243px',
-                            backgroundColor: '#176087',
-                            '&:hover': {
-                                backgroundColor: '#14506E'
-                            }
-                        }}
-                    >
-                        Login
-                    </Button>
-                    <Grid item xs>
-                        <Link href="#" variant="body2">
-                            Forgot password?
-                        </Link>
-                    </Grid>
-                    <Grid item>
-                             <Typography>
-                            Don't have an account?
-                            <Link to="./Register">Register here</Link>
-                        </Typography>
-                    </Grid>
-
-                </Box>
-            </Grid>
-        </Grid>
-    );
+          {success && (
+            <Stack sx={{ width: "100%", paddingTop: "10px" }} spacing={2}>
+              <Alert severity="success" size="small">
+                {success}
+              </Alert>
+            </Stack>
+          )}
+          <Grid item xs>
+            <Link href="#" variant="body2">
+              Forgot password?
+            </Link>
+          </Grid>
+          <Grid item>
+            <Typography>
+              Don't have an account?
+              <Link to="./Register">Register here</Link>
+            </Typography>
+          </Grid>
+        </Box>
+      </Grid>
+    </Grid>
+  );
 }
-
