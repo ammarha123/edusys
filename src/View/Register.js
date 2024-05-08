@@ -34,6 +34,7 @@ export default function Register() {
   });
 
   const [err, setErr] = React.useState(false);
+  const [success, setSuccess] = React.useState();
 
   const handleChange = (e) => {
     setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -41,19 +42,25 @@ export default function Register() {
 
   const handleClick = async (e) => {
     e.preventDefault();
+    setSuccess(null);
 
     try {
-      await axios.post("http://localhost:8800/api/auth/register", inputs);
+      await axios.post(
+        "http://localhost:8800/api/controller/auth/register",
+        inputs
+      );
+      setSuccess("Registration successful.");
     } catch (err) {
       setErr(err.response.data);
+      setSuccess("Username already exists. Please choose a different username");
     }
   };
 
   console.log(err);
 
   // Boleh delete nanti
-  // const [showPassword, setShowPassword] = React.useState(false);
-  // const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
+  const [showPassword, setShowPassword] = React.useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
 
   // Input
   // const [fullName, setfullName] = React.useState("");
@@ -72,12 +79,12 @@ export default function Register() {
   // const [formValid, setFormValid] = React.useState();
   // const [success, setSuccess] = React.useState();
 
-  // const handleClickShowPassword = () => setShowPassword((show) => !show);
-  // const handleClickShowConfirmPassword = () =>
-  //   setShowConfirmPassword((show) => !show);
-  // const handleMouseDownPassword = (event) => {
-  //   event.preventDefault();
-  // };
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleClickShowConfirmPassword = () =>
+    setShowConfirmPassword((show) => !show);
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
 
   // const handleEmail = () => {
   //   console.log(isEmail(email));
@@ -271,22 +278,22 @@ export default function Register() {
                 onChange={handleChange}
                 // error={passwordError}
                 // onBlur={handlePassword}
-                // type={showPassword ? "text" : "password"}
+                type={showPassword ? "text" : "password"}
                 // onChange={(event) => {
                 //   setPassword(event.target.value);
                 // }}
                 sx={{ backgroundColor: "white", width: "100%" }}
-                // endAdornment={
-                //   <InputAdornment position="end">
-                //     <IconButton
-                //       aria-label="toggle password visibility"
-                //       onClick={handleClickShowPassword}
-                //       onMouseDown={handleMouseDownPassword}
-                //     >
-                //       {showPassword ? <VisibilityOff /> : <Visibility />}
-                //     </IconButton>
-                //   </InputAdornment>
-                // }
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
               />
             </FormGrid>
           </Box>
@@ -302,22 +309,22 @@ export default function Register() {
                 onChange={handleChange}
                 // error={confirmPasswordError}
                 // onBlur={handleConfirmPassword}
-                // type={showConfirmPassword ? "text" : "password"}
+                type={showConfirmPassword ? "text" : "password"}
                 // onChange={(event) => {
                 //   setConfirmPassword(event.target.value);
                 // }}
                 sx={{ backgroundColor: "white", width: "100%" }}
-                // endAdornment={
-                //   <InputAdornment position="end">
-                //     <IconButton
-                //       aria-label="toggle password visibility"
-                //       onClick={handleClickShowConfirmPassword}
-                //       onMouseDown={handleMouseDownPassword}
-                //     >
-                //       {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                //     </IconButton>
-                //   </InputAdornment>
-                // }
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowConfirmPassword}
+                      onMouseDown={handleMouseDownPassword}
+                    >
+                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
               />
             </FormGrid>
           </Box>
@@ -345,7 +352,7 @@ export default function Register() {
                 {formValid}
               </Alert>
             </Stack>
-          )}
+          )} */}
 
           {success && (
             <Stack sx={{ width: "100%", paddingTop: "10px" }} spacing={2}>
@@ -353,7 +360,7 @@ export default function Register() {
                 {success}
               </Alert>
             </Stack>
-          )} */}
+          )}
           <Grid item>
             <Typography>
               I have an account

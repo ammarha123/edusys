@@ -7,7 +7,7 @@ export const register = (req, res) => {
 
   const q = "SELECT * FROM user WHERE username = ?";
 
-  db.query(q, [req.body.username], (err, data) => {
+  db.query(q, [req.body.userName], (err, data) => {
     if (err) return res.status(500).json(err);
     if (data.length) return res.status(409).json("User already exists!");
     //CREATE A NEW USER
@@ -19,8 +19,8 @@ export const register = (req, res) => {
       "INSERT INTO user (`fullname`,`username`,`email`,`password`) VALUE (?)";
 
     const values = [
-      req.body.fullname,
-      req.body.username,
+      req.body.fullName,
+      req.body.userName,
       req.body.email,
       hashedPassword,
     ];
@@ -35,7 +35,7 @@ export const register = (req, res) => {
 export const login = (req, res) => {
   const q = "SELECT * FROM user WHERE username = ?";
 
-  db.query(q, [req.body.username], (err, data) => {
+  db.query(q, [req.body.userName], (err, data) => {
     if (err) return res.status(500).json(err);
     if (data.length === 0) return res.status(404).json("User not found!");
 

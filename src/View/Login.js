@@ -1,3 +1,4 @@
+// test
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Checkbox from "@mui/material/Checkbox";
@@ -18,6 +19,8 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { styled } from "@mui/system";
 import { AuthContext } from "../context/authContext";
 import axios from "axios";
+import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 
 const FormGrid = styled("div")(() => ({
   display: "flex",
@@ -31,6 +34,7 @@ export default function Login() {
   });
 
   const [err, setErr] = React.useState(false);
+  const [success, setSuccess] = React.useState();
 
   const handleChange = (e) => {
     setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -40,18 +44,24 @@ export default function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setSuccess(null);
 
     try {
-      await axios.post("http://localhost:8800/api/auth/login", inputs);
+      await axios.post(
+        "http://localhost:8800/api/controller/auth/login",
+        inputs
+      );
+      setSuccess("Login successful.");
     } catch (err) {
       setErr(err.response.data);
+      setSuccess("Wrong password or username!");
     }
   };
 
   console.log(err);
 
   // Delete
-  // const [showPassword, setShowPassword] = React.useState(false);
+  const [showPassword, setShowPassword] = React.useState(false);
 
   // // Input
   // const [userName, setUserName] = React.useState("");
@@ -66,10 +76,10 @@ export default function Login() {
   // const [formValid, setFormValid] = React.useState();
   // const [success, setSuccess] = React.useState();
 
-  // const handleClickShowPassword = () => setShowPassword((show) => !show);
-  // const handleMouseDownPassword = (event) => {
-  //   event.preventDefault();
-  // };
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
 
   // const handlePassword = () => {
   //   if (!password || password.length < 6 || password.length > 20) {
@@ -154,7 +164,6 @@ export default function Login() {
           <Typography component="h1" variant="h5" padding="20px" margin="10px">
             Welcome Back!
           </Typography>
-
           <Box
             sx={{
               display: "flex",
@@ -163,11 +172,11 @@ export default function Login() {
             }}
           >
             <FormGrid sx={{ flexGrow: 1 }}>
-              <FormLabel htmlFor="username">Username</FormLabel>
+              <FormLabel htmlFor="userName">Username</FormLabel>
               <OutlinedInput
-                id="username"
+                id="userName"
                 name="userName"
-                autoComplete="username"
+                autoComplete="userName"
                 placeholder=""
                 required
                 onChange={handleChange}
@@ -192,25 +201,37 @@ export default function Login() {
                 // value={password}
                 // error={passwordError}
                 // onBlur={handlePassword}
-                // type={showPassword ? "text" : "password"}
+                type={showPassword ? "text" : "password"}
                 // onChange={(event) => {
                 //   setPassword(event.target.value);
                 // }}
                 sx={{ backgroundColor: "white", width: "100%" }}
-                // endAdornment={
-                //   <InputAdornment position="end">
-                //     <IconButton
-                //       aria-label="toggle password visibility"
-                //       onClick={handleClickShowPassword}
-                //       onMouseDown={handleMouseDownPassword}
-                //     >
-                //       {showPassword ? <VisibilityOff /> : <Visibility />}
-                //     </IconButton>
-                //   </InputAdornment>
-                // }
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
               />
             </FormGrid>
           </Box>
+          <GoogleLogin
+            onSuccess={(credentialResponse) => {
+              const credentialResponseDecoded = jwtDecode(
+                credentialResponse.credential
+              );
+              console.log(credentialResponseDecoded);
+            }}
+            onError={() => {
+              console.log("Login Failed");
+            }}
+          />
+
           <Box
             sx={{
               display: "flex",
@@ -247,7 +268,7 @@ export default function Login() {
                 {formValid}
               </Alert>
             </Stack>
-          )}
+          )} */}
 
           {success && (
             <Stack sx={{ width: "100%", paddingTop: "10px" }} spacing={2}>
@@ -255,7 +276,7 @@ export default function Login() {
                 {success}
               </Alert>
             </Stack>
-          )} */}
+          )}
           <Grid item xs>
             <Link href="#" variant="body2">
               Forgot password?
