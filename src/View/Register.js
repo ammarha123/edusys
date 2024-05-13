@@ -199,7 +199,7 @@ export default function Register() {
             borderRadius: 1,
           }}
         >
-          <Typography component="h1" variant="h5" margin="5px" mb="30px">
+          <Typography component="h1" variant="h5" sx={{ margin: '5px', mb: '30px', fontFamily:'Calistoga'}}>
             Please Fill Out Form to Register!
           </Typography>
 
@@ -211,7 +211,7 @@ export default function Register() {
             }}
           >
             <FormGrid sx={{ flexGrow: 1 }}>
-              <FormLabel>Full Name</FormLabel>
+              <FormLabel  sx={{fontFamily:'Calistoga'}}>Full Name</FormLabel>
               <OutlinedInput
                 id="fullName"
                 name="fullName"
@@ -229,7 +229,7 @@ export default function Register() {
           </Box>
           <Box sx={{ display: "flex", width: "100%", padding: "10px" }}>
             <FormGrid sx={{ flexGrow: 1 }}>
-              <FormLabel>Username</FormLabel>
+              <FormLabel  sx={{fontFamily:'Calistoga'}}>Username</FormLabel>
               <OutlinedInput
                 id="username"
                 name="userName"
@@ -247,7 +247,7 @@ export default function Register() {
           </Box>
           <Box sx={{ display: "flex", width: "100%", padding: "10px" }}>
             <FormGrid sx={{ flexGrow: 1 }}>
-              <FormLabel>Email</FormLabel>
+              <FormLabel  sx={{fontFamily:'Calistoga'}}>Email</FormLabel>
               <OutlinedInput
                 id="Email"
                 name="email"
@@ -267,7 +267,7 @@ export default function Register() {
           </Box>
           <Box sx={{ display: "flex", width: "100%", padding: "10px" }}>
             <FormGrid sx={{ flexGrow: 1 }}>
-              <FormLabel>Password</FormLabel>
+              <FormLabel  sx={{fontFamily:'Calistoga'}}>Password</FormLabel>
               <OutlinedInput
                 id="password"
                 name="password"
@@ -299,7 +299,7 @@ export default function Register() {
           </Box>
           <Box sx={{ display: "flex", width: "100%", padding: "10px" }}>
             <FormGrid sx={{ flexGrow: 1 }}>
-              <FormLabel>Confirm Password</FormLabel>
+              <FormLabel  sx={{fontFamily:'Calistoga'}}>Confirm Password</FormLabel>
               <OutlinedInput
                 id="confirmPassword"
                 autoComplete="confirmPassword"
@@ -362,7 +362,7 @@ export default function Register() {
             </Stack>
           )}
           <Grid item>
-            <Typography>
+            <Typography sx={{ fontFamily:'Calistoga'}}>
               I have an account
               <Link to="/"> Login</Link>
             </Typography>
