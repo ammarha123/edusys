@@ -22,7 +22,7 @@ const FormGrid = styled("div")(() => ({
   flexDirection: "column",
 }));
 
-export default function Password() {
+export default function ForgotPassword() {
   const [showPassword, setShowPassword] = React.useState(false);
 
   // Input

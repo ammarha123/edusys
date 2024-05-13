@@ -160,7 +160,7 @@ export default function Login() {
             borderRadius: 1,
           }}
         >
-          <Typography component="h1" variant="h5" padding="20px" margin="10px">
+           <Typography component="h1" variant="h5" sx={{ padding: '20px', margin: '10px', fontFamily:'Calistoga'}}>
             Welcome Back!
           </Typography>
           <Box
@@ -171,7 +171,7 @@ export default function Login() {
             }}
           >
             <FormGrid sx={{ flexGrow: 1 }}>
-              <FormLabel htmlFor="userName">Username</FormLabel>
+              <FormLabel htmlFor="userName" sx={{fontFamily:'Calistoga'}}>Username</FormLabel>
               <OutlinedInput
                 id="userName"
                 name="userName"
@@ -189,7 +189,7 @@ export default function Login() {
           </Box>
           <Box sx={{ display: "flex", width: "100%", padding: "10px" }}>
             <FormGrid sx={{ flexGrow: 1 }}>
-              <FormLabel htmlFor="password">Password</FormLabel>
+              <FormLabel htmlFor="password" sx={{fontFamily:'Calistoga'}}>Password</FormLabel>
               <OutlinedInput
                 id="password"
                 name="password"
@@ -240,7 +240,7 @@ export default function Login() {
           >
             <FormControlLabel
               control={<Checkbox name="saveInfo" />}
-              label="Remember me"
+              label ="Remember me"
             />
           </Box>
           <Button
@@ -256,6 +256,7 @@ export default function Login() {
               "&:hover": {
                 backgroundColor: "#14506E",
               },
+               fontFamily:'Calistoga'
             }}
             onClick={handleLogin}
           >
@@ -277,14 +278,14 @@ export default function Login() {
             </Stack>
           )}
           <Grid item xs>
-            <Link href="#" variant="body2">
-              Forgot password?
-            </Link>
+            <Typography sx={{fontFamily:'Calistoga'}}> 
+              <Link to="/PasswordReset">Forgot Password?</Link>
+            </Typography>
           </Grid>
           <Grid item>
-            <Typography>
+           <Typography sx={{fontFamily:'Calistoga'}}>
               Don't have an account?
-              <Link to="./Register">Register here</Link>
+              <Link to="/Register"> Register here</Link>
             </Typography>
           </Grid>
         </Box>
