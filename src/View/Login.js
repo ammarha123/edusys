@@ -9,7 +9,7 @@ import { Grid } from "@mui/material";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Alert from "@mui/material/Alert";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import backgroundImage from "../Components/chatbot-background.jpg";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -35,6 +35,8 @@ export default function Login() {
   const [err, setErr] = React.useState(false);
   const [success, setSuccess] = React.useState();
 
+  const navigate = useNavigate();
+
   const handleChange = (e) => {
     setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
@@ -50,6 +52,7 @@ export default function Login() {
         "http://localhost:8800/api/controller/auth/login",
         inputs
       );
+      navigate("/Chatbot");
       setSuccess("Login successful.");
     } catch (err) {
       setErr(err.response.data);
