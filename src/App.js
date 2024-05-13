@@ -9,6 +9,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />}></Route>
         <Route path="/Register" element={<Register />}></Route>
+        <Route path='/PasswordReset' element={<Password />}></Route>
+        <Route path='/dashboard' element={<Dashboard/>}></Route>
       </Routes>
     </BrowserRouter>
   );
