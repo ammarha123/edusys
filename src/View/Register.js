@@ -341,6 +341,7 @@ export default function Register() {
               "&:hover": {
                 backgroundColor: "#14506E",
               },
+              fontFamily:'Calistoga'
             }}
             onClick={handleClick}
           >

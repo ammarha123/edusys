@@ -144,12 +144,10 @@ export default function Login() {
         md={4}
         elevation={4}
         sx={{
-          height: "479px",
-          width: "479px",
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-          backgroundColor: "#53A2BE", // Set the background color
+          backgroundColor: "#53A2BE",
           borderRadius: 3,
         }}
       >
@@ -222,6 +220,7 @@ export default function Login() {
               />
             </FormGrid>
           </Box>
+          <Box sx={{ display: "flex", width: "100%", padding: "10px" ,  justifyContent: "center",}}>
           <GoogleLogin
             onSuccess={(credentialResponse) => {
               const credentialResponseDecoded = jwtDecode(
@@ -233,6 +232,7 @@ export default function Login() {
               console.log("Login Failed");
             }}
           />
+          </Box>
 
           <Box
             sx={{

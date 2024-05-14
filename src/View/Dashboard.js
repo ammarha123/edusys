@@ -112,7 +112,7 @@ export default function Dashboard() {
                         p: 2,
                         mx: '90px'
                     }}>
-                    <Link to="/Login" style={{ textDecoration: 'none' }}>
+                    <Link to="/Chatbot" style={{ textDecoration: 'none' }}>
                         <Button
                             type="submit"
                             fullWidth
