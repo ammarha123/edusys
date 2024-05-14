@@ -15,6 +15,7 @@ function App() {
         <Route path="/PasswordReset" element={<ForgotPassword />}></Route>
         <Route path="/dashboard" element={<Dashboard />}></Route>
         <Route path="/Chatbot" element={<ChatbotFrontEnd />}></Route>
+        <Route path="/Chatbot" element={<ChatbotFrontEnd />}></Route>
       </Routes>
     </BrowserRouter>
   );
