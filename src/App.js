@@ -4,11 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Register from "./View/Register";
 import ForgotPassword from "./View/ForgotPassword";
 import Dashboard from "./View/Dashboard";
-import Chatbot from "./View/Chatbot";
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
+import ChatbotFrontEnd from "./View/ChatbotFrontEnd";
 
 function App() {
   return (
@@ -16,17 +12,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />}></Route>
         <Route path="/Register" element={<Register />}></Route>
-<<<<<<< Updated upstream
         <Route path="/PasswordReset" element={<ForgotPassword />}></Route>
         <Route path="/dashboard" element={<Dashboard />}></Route>
-        <Route path="/Chatbot" element={<Chatbot />}></Route>
-=======
-        <Route path='/PasswordReset' element={<ForgotPassword/>}></Route>
-        <Route path='/dashboard' element={<Dashboard/>}></Route>
-        <Route path='/chatbot' element={<Chatbot/>}></Route>
-      
-        
->>>>>>> Stashed changes
+        <Route path="/Chatbot" element={<ChatbotFrontEnd />}></Route>
       </Routes>
     </BrowserRouter>
   );
