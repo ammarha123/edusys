@@ -15,6 +15,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import EditNoteIcon from '@mui/icons-material/EditNote';
+import { Link } from "react-router-dom";
 
 export default function ChatbotFrontEnd() {
     const drawerWidth = 240;
@@ -36,29 +37,109 @@ export default function ChatbotFrontEnd() {
         }
     };
 
+    const History = [
+        {
+            title: "Visual Learner Planner",
+            date: "29 April 2023",
+        },
+        {
+            title: "Visual Learner Planner",
+            date: "26 April 2023",
+        },
+        {
+            title: "Plant Lesson Plan",
+            date: "4 April 2023",
+        },
+        {
+            title: "Science Y4 Lesson Plan",
+            date: "3 April 2023",
+        },
+    ];
+    
+   
+
     const drawer = (
         <div>
             <Toolbar />
             <Divider />
-            <List>
-                {['New Chat', 'Editor',].map((text, index) => (
-                    <ListItem key={text} disablePadding>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                {index % 2 === 0 ? <AddCircleIcon /> : <EditNoteIcon />}
-                            </ListItemIcon>
-                            <ListItemText primary={text} sx={{fontFamily: 'Calistoga'}} />
-                        </ListItemButton>
-                    </ListItem>
-                ))}
-            </List>
+            <Box
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent:'center',
+                    mx: 1
+                }}>
+                <Link to="/Chatbot" style={{ textDecoration: 'none' }}>
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        startIcon={<AddCircleIcon sx={{ fontSize: 'large' }} />}
+                        sx={{
+                            mt: 2,
+                            mb: 2,
+                            width: '200px',
+                            backgroundColor: "#FFD500",
+                            "&:hover": {
+                                backgroundColor: "#FFD500",
+                            },
+                            fontFamily: 'Calistoga',
+                            borderRadius: '30px',
+                            fontSize: '18px'
+                        }}
+                    >
+                        New Chat
+                    </Button>
+                </Link>
+            </Box>
+            <Box
+                sx={{
+                    display: 'flex',
+                    justifyContent:'center',
+                    alignItems: 'center',
+                    mx: 1
+                }}>
+                <Link to="/Editor" style={{ textDecoration: 'none' }}>
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        startIcon={<EditNoteIcon sx={{ fontSize: 'large' }} />}
+                        sx={{
+                            mt: 2,
+                            mb: 2,
+                             width: '200px',
+                            backgroundColor: "#FFD500",
+                            "&:hover": {
+                                backgroundColor: "#FFD500",
+                            },
+                            fontFamily: 'Calistoga',
+                            borderRadius: '30px',
+                            fontSize: '18px'
+                        }}
+                    >
+                        Editor
+                    </Button>
+                </Link>
+            </Box>
             <Divider />
-            <List sx={{my: 2, mx: 2,}}>
-                <Typography variant="h6" sx={{ fontFamily: 'Calistoga'}}>Chat History</Typography>
-                {['History1', 'History2', 'History3'].map((text, index) => (
-                    <ListItem key={text}>
+            <List >
+                <Typography variant="h6" sx={{ fontFamily: 'Calistoga', mb: 1, my: 1, mx: 2 }}>Chat History</Typography>
+                {History.map((item, index) => (
+                    <ListItem key={index} sx={{ py: 0, }}>
                         <ListItemButton>
-                            <ListItemText primary={text} sx={{ fontFamily: 'Calistoga'}} />
+                            <ListItemText
+                                primary={
+                                    <Typography component="h8" sx={{ fontFamily: 'Calistoga' }}>
+                                        {item.title}
+                                    </Typography>
+                                }
+                                secondary={
+                                    <Typography variant="body2" sx={{ fontFamily: 'Calistoga' }}>
+                                        {item.date}
+                                    </Typography>
+                                }
+                            />
                         </ListItemButton>
                     </ListItem>
                 ))}
@@ -68,7 +149,27 @@ export default function ChatbotFrontEnd() {
 
     const messagesListRef = React.createRef();
     const [messageInput, setMessageInput] = useState("");
-    const [messages, setMessages] = useState([]);
+    const [messages, setMessages] = useState([
+        {
+            content: "Hello. Welcome to EduSys. Please choose an learning styles option below?",
+            isCustomer: false,
+            choices: ["Visual", "Verbal", "Active", "Reflective", "Intuitive", "Sensitive", "Sequential", "Global"]
+        },
+        {
+            content: "Visual",
+            isCustomer: true
+        },
+        {
+            content: "Visual learning is one of the three primary learning styles, along with auditory and kinesthetic learning. People who are visual learners often find it easier to understand and remember information when it is presented to them visually, rather than through verbal or written means. Here are key aspects of visual learning styles, along with some strategies that visual learners can use to enhance their educational experience:",
+            isCustomer: false,
+        },
+        {
+            content: "Choose an action",
+            isCustomer: false,
+            choices: ["LO", "Exercise", "Teaching Strategies", "Environment"]
+        }
+    ]);
+
 
     const sendMessage = (content) => {
         // add the message to the state
@@ -92,7 +193,7 @@ export default function ChatbotFrontEnd() {
 
     return (
 
-        <Box Box sx={{ display: 'flex'}}>
+        <Box Box sx={{ display: 'flex' }}>
             <CssBaseline />
             <AppBar
                 position="fixed"
@@ -145,6 +246,9 @@ export default function ChatbotFrontEnd() {
                             height: '100%',
                             overflow: "scroll",
                             overflowX: "hidden",
+                            flex: 1,
+                            height: '80vh', 
+                            justifyContent: 'space-between'
                         }}
                     >
                         <Box sx={{ m: 1, mr: 2 }}>
