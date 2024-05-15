@@ -161,7 +161,11 @@ export default function Login() {
             borderRadius: 1,
           }}
         >
-           <Typography component="h1" variant="h5" sx={{ padding: '20px', margin: '10px', fontFamily:'Calistoga'}}>
+          <Typography
+            component="h1"
+            variant="h5"
+            sx={{ padding: "20px", margin: "10px", fontFamily: "Calistoga" }}
+          >
             Welcome Back!
           </Typography>
           <Box
@@ -172,7 +176,9 @@ export default function Login() {
             }}
           >
             <FormGrid sx={{ flexGrow: 1 }}>
-              <FormLabel htmlFor="userName" sx={{fontFamily:'Calistoga'}}>Username</FormLabel>
+              <FormLabel htmlFor="userName" sx={{ fontFamily: "Calistoga" }}>
+                Username
+              </FormLabel>
               <OutlinedInput
                 id="userName"
                 name="userName"
@@ -190,7 +196,9 @@ export default function Login() {
           </Box>
           <Box sx={{ display: "flex", width: "100%", padding: "10px" }}>
             <FormGrid sx={{ flexGrow: 1 }}>
-              <FormLabel htmlFor="password" sx={{fontFamily:'Calistoga'}}>Password</FormLabel>
+              <FormLabel htmlFor="password" sx={{ fontFamily: "Calistoga" }}>
+                Password
+              </FormLabel>
               <OutlinedInput
                 id="password"
                 name="password"
@@ -220,18 +228,26 @@ export default function Login() {
               />
             </FormGrid>
           </Box>
-          <Box sx={{ display: "flex", width: "100%", padding: "10px" ,  justifyContent: "center",}}>
-          <GoogleLogin
-            onSuccess={(credentialResponse) => {
-              const credentialResponseDecoded = jwtDecode(
-                credentialResponse.credential
-              );
-              console.log(credentialResponseDecoded);
+          <Box
+            sx={{
+              display: "flex",
+              width: "100%",
+              padding: "10px",
+              justifyContent: "center",
             }}
-            onError={() => {
-              console.log("Login Failed");
-            }}
-          />
+          >
+            <GoogleLogin
+              onSuccess={(credentialResponse) => {
+                const credentialResponseDecoded = jwtDecode(
+                  credentialResponse.credential
+                );
+                console.log(credentialResponseDecoded);
+                navigate("/Chatbot");
+              }}
+              onError={() => {
+                console.log("Login Failed");
+              }}
+            />
           </Box>
 
           <Box
@@ -243,7 +259,7 @@ export default function Login() {
           >
             <FormControlLabel
               control={<Checkbox name="saveInfo" />}
-              label ="Remember me"
+              label="Remember me"
             />
           </Box>
           <Button
@@ -259,7 +275,7 @@ export default function Login() {
               "&:hover": {
                 backgroundColor: "#14506E",
               },
-               fontFamily:'Calistoga'
+              fontFamily: "Calistoga",
             }}
             onClick={handleLogin}
           >
@@ -281,12 +297,12 @@ export default function Login() {
             </Stack>
           )}
           <Grid item xs>
-            <Typography sx={{fontFamily:'Calistoga'}}> 
+            <Typography sx={{ fontFamily: "Calistoga" }}>
               <Link to="/PasswordReset">Forgot Password?</Link>
             </Typography>
           </Grid>
           <Grid item>
-           <Typography sx={{fontFamily:'Calistoga'}}>
+            <Typography sx={{ fontFamily: "Calistoga" }}>
               Don't have an account?
               <Link to="/Register"> Register here</Link>
             </Typography>
