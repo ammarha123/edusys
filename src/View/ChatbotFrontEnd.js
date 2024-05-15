@@ -22,8 +22,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import EditNoteIcon from "@mui/icons-material/EditNote";
-import { GoogleLogin } from "@react-oauth/google";
-import axios from "axios";
+import { Link } from "react-router-dom";
 
 export default function ChatbotFrontEnd() {
   const drawerWidth = 240;
@@ -79,12 +78,7 @@ export default function ChatbotFrontEnd() {
 
   const messagesListRef = React.createRef();
   const [messageInput, setMessageInput] = useState("");
-  const [messages, setMessages] = useState([
-    {
-      content: "Hello. How can I help you today?",
-      isCustomer: false,
-    },
-  ]);
+  const [messages, setMessages] = useState([]);
 
   const sendMessage = (content) => {
     // add the message to the state
