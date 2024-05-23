@@ -15,6 +15,17 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { styled } from "@mui/system";
 import axios from "axios";
+import { db, auth, provider } from "../Components/firebase-config.js";
+import {
+  getDocs,
+  addDoc,
+  collection,
+  where,
+  query,
+  doc,
+} from "firebase/firestore";
+
+const dbref = collection(db, "Auth");
 
 const FormGrid = styled("div")(() => ({
   display: "flex",
@@ -44,16 +55,51 @@ export default function Register() {
     e.preventDefault();
     setSuccess(null);
 
-    try {
-      await axios.post(
-        "http://localhost:8800/api/controller/auth/register",
-        inputs
-      );
-      setSuccess("Registration successful.");
-    } catch (err) {
-      setErr(err.response.data);
+    const findUsername = query(dbref, where("Username", "==", inputs.userName));
+
+    const snapshot = await getDocs(findUsername);
+    const usernameFoundArray = snapshot.docs.map((doc) => doc.data);
+
+    if (usernameFoundArray.length > 0) {
+      // alert("Username already exists");
+      // return res.status(500).json("Username exists.");
       setSuccess("Username already exists. Please choose a different username");
+    } else {
+      const findEmail = query(dbref, where("Email", "==", inputs.email));
+
+      const snapshot = await getDocs(findEmail);
+      const emailFoundArray = snapshot.docs.map((doc) => doc.data);
+
+      if (emailFoundArray.length > 0) {
+        // alert("Email already exists");
+        // return res.status(501).json("Email exists.");
+        setSuccess("Email already exists. Please choose a different username");
+      } else {
+        await addDoc(dbref, {
+          Name: inputs.fullName,
+          Username: inputs.userName,
+          Email: inputs.email,
+          Password: inputs.password,
+        });
+        // return res.status(200).json("User has been created.");
+        setSuccess("Registration succcessful.");
+      }
     }
+
+    // try {
+    //   await axios.post(
+    //     "http://localhost:8800/api/controller/auth/register",
+    //     inputs
+    //   );
+    //   setSuccess("Registration successful.");
+    // } catch (err) {
+    //   if (err.response.status === 500)
+    //     setSuccess(
+    //       "Username already exists. Please choose a different username"
+    //     );
+    //   else
+    //     setSuccess("Email already exists. Please choose a different username");
+    // }
   };
 
   console.log(err);
@@ -199,7 +245,11 @@ export default function Register() {
             borderRadius: 1,
           }}
         >
-          <Typography component="h1" variant="h5" sx={{ margin: '5px', mb: '30px', fontFamily:'Calistoga'}}>
+          <Typography
+            component="h1"
+            variant="h5"
+            sx={{ margin: "5px", mb: "30px", fontFamily: "Calistoga" }}
+          >
             Please Fill Out Form to Register!
           </Typography>
 
@@ -211,7 +261,7 @@ export default function Register() {
             }}
           >
             <FormGrid sx={{ flexGrow: 1 }}>
-              <FormLabel  sx={{fontFamily:'Calistoga'}}>Full Name</FormLabel>
+              <FormLabel sx={{ fontFamily: "Calistoga" }}>Full Name</FormLabel>
               <OutlinedInput
                 id="fullName"
                 name="fullName"
@@ -229,7 +279,7 @@ export default function Register() {
           </Box>
           <Box sx={{ display: "flex", width: "100%", padding: "10px" }}>
             <FormGrid sx={{ flexGrow: 1 }}>
-              <FormLabel  sx={{fontFamily:'Calistoga'}}>Username</FormLabel>
+              <FormLabel sx={{ fontFamily: "Calistoga" }}>Username</FormLabel>
               <OutlinedInput
                 id="username"
                 name="userName"
@@ -247,7 +297,7 @@ export default function Register() {
           </Box>
           <Box sx={{ display: "flex", width: "100%", padding: "10px" }}>
             <FormGrid sx={{ flexGrow: 1 }}>
-              <FormLabel  sx={{fontFamily:'Calistoga'}}>Email</FormLabel>
+              <FormLabel sx={{ fontFamily: "Calistoga" }}>Email</FormLabel>
               <OutlinedInput
                 id="Email"
                 name="email"
@@ -267,7 +317,7 @@ export default function Register() {
           </Box>
           <Box sx={{ display: "flex", width: "100%", padding: "10px" }}>
             <FormGrid sx={{ flexGrow: 1 }}>
-              <FormLabel  sx={{fontFamily:'Calistoga'}}>Password</FormLabel>
+              <FormLabel sx={{ fontFamily: "Calistoga" }}>Password</FormLabel>
               <OutlinedInput
                 id="password"
                 name="password"
@@ -299,7 +349,9 @@ export default function Register() {
           </Box>
           <Box sx={{ display: "flex", width: "100%", padding: "10px" }}>
             <FormGrid sx={{ flexGrow: 1 }}>
-              <FormLabel  sx={{fontFamily:'Calistoga'}}>Confirm Password</FormLabel>
+              <FormLabel sx={{ fontFamily: "Calistoga" }}>
+                Confirm Password
+              </FormLabel>
               <OutlinedInput
                 id="confirmPassword"
                 autoComplete="confirmPassword"
@@ -341,7 +393,7 @@ export default function Register() {
               "&:hover": {
                 backgroundColor: "#14506E",
               },
-              fontFamily:'Calistoga'
+              fontFamily: "Calistoga",
             }}
             onClick={handleClick}
           >
@@ -363,9 +415,9 @@ export default function Register() {
             </Stack>
           )}
           <Grid item>
-            <Typography sx={{ fontFamily:'Calistoga'}}>
+            <Typography sx={{ fontFamily: "Calistoga" }}>
               I have an account
-              <Link to="/"> Login</Link>
+              <Link to="/Login"> Login</Link>
             </Typography>
           </Grid>
         </Box>

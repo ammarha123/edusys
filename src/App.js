@@ -9,8 +9,13 @@ import LandingPage from "./View/Landing";
 import Home from "./View/Home";
 import About from "./View/About";
 import Contact from "./View/Contact";
+import Chats from "./View/Chats";
+import { useContext } from "react";
+import { AuthContext } from "./context/authContext";
 
 function App() {
+  const { currentUser } = useContext(AuthContext);
+
   return (
     <BrowserRouter>
       <Routes>
@@ -20,7 +25,7 @@ function App() {
         <Route path="/PasswordReset" element={<ForgotPassword />}></Route>
         <Route path="/dashboard" element={<Dashboard />}></Route>
         <Route path="/Chatbot" element={<ChatbotFrontEnd />}></Route>
-        <Route path="/Chatbot" element={<ChatbotFrontEnd />}></Route>
+        <Route path="/Chats" element={<Chats />}></Route>
       </Routes>
     </BrowserRouter>
   );

@@ -9,7 +9,7 @@ import { Grid } from "@mui/material";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Alert from "@mui/material/Alert";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import backgroundImage from "../Components/chatbot-background.jpg";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -20,6 +20,23 @@ import { AuthContext } from "../context/authContext";
 import axios from "axios";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
+import { db, auth, provider } from "../Components/firebase-config.js";
+import {
+  getDocs,
+  addDoc,
+  setDoc,
+  collection,
+  where,
+  query,
+  doc,
+} from "firebase/firestore";
+import { signInWithPopup } from "firebase/auth";
+import Cookies from "universal-cookie";
+import { Cookie } from "@mui/icons-material";
+
+const dbref = collection(db, "Auth");
+const cookies = new Cookies();
+// const cookiesName = new Cookies();
 
 const FormGrid = styled("div")(() => ({
   display: "flex",
@@ -31,6 +48,9 @@ export default function Login() {
     userName: "",
     password: "",
   });
+
+  const [isAuth, setIsAuth] = React.useState(cookies.get("auth-token"));
+  // const [userLogin, setUserLogin] = React.useState(cookies.get("name-token"));
 
   const [err, setErr] = React.useState(false);
   const [success, setSuccess] = React.useState();
@@ -47,20 +67,57 @@ export default function Login() {
     e.preventDefault();
     setSuccess(null);
 
-    try {
-      await axios.post(
-        "http://localhost:8800/api/controller/auth/login",
-        inputs
-      );
-      navigate("/Chatbot");
+    const emailMatch = query(dbref, where("Username", "==", inputs.userName));
+    const emailSnapshot = await getDocs(emailMatch);
+    const emailArray = emailSnapshot.docs.map((doc) => doc.data());
+    const passwordMatch = query(
+      dbref,
+      where("Password", "==", inputs.password)
+    );
+    const passwordSnapshot = await getDocs(passwordMatch);
+    const passwordArray = passwordSnapshot.docs.map((doc) => doc.data());
+
+    if (emailArray.length > 0 && passwordArray.length > 0) {
       setSuccess("Login successful.");
+      cookies.set("auth-token", inputs.email);
+      navigate("/Dashboard");
+    } else {
+      setSuccess("Wrong email or password.");
+    }
+
+    // try {
+    //   await axios.post(
+    //     "http://localhost:8800/api/controller/auth/login",
+    //     inputs
+    //   );
+    //   navigate("/Dashboard");
+    //   setSuccess("Login successful.");
+    // } catch (err) {
+    //   console.log(err.response.status);
+    //   setSuccess("Wrong email or password!");
+    // }
+  };
+
+  const googleLogin = async (e) => {
+    e.preventDefault();
+    setSuccess(null);
+
+    try {
+      const result = await signInWithPopup(auth, provider);
+      cookies.set("auth-token", result.user.email);
+      setIsAuth(true);
+      await setDoc(doc(db, "Auth", result.user.uid), {
+        Name: result.user.displayName,
+        Username: result.user.uid,
+        Email: result.user.email,
+      });
+      console.log(result);
     } catch (err) {
-      setErr(err.response.data);
-      setSuccess("Wrong password or username!");
+      console.error(err);
     }
   };
 
-  console.log(err);
+  // console.log(err);
 
   // Delete
   const [showPassword, setShowPassword] = React.useState(false);
@@ -121,167 +178,188 @@ export default function Login() {
   //   setSuccess("Form Submitted Successfully");
   // };
 
-  return (
-    <Grid
-      container
-      component="main"
-      sx={{
-        height: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "flex-start",
-        paddingLeft: "200px",
-        backgroundImage: `url(${backgroundImage})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-      }}
-    >
+  if (!isAuth) {
+    return (
       <Grid
-        item
-        xs={12}
-        sm={2}
-        md={4}
-        elevation={4}
+        container
+        component="main"
         sx={{
+          height: "100vh",
           display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          backgroundColor: "#53A2BE",
-          borderRadius: 3,
+          alignItems: "center",
+          justifyContent: "flex-start",
+          paddingLeft: "200px",
+          backgroundImage: `url(${backgroundImage})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
         }}
       >
-        <Box
+        <Grid
+          item
+          xs={12}
+          sm={2}
+          md={4}
+          elevation={4}
           sx={{
-            my: 8,
-            mx: 4,
             display: "flex",
             flexDirection: "column",
-            alignItems: "center",
-            borderRadius: 1,
+            justifyContent: "center",
+            backgroundColor: "#53A2BE",
+            borderRadius: 3,
           }}
         >
-          <Typography
-            component="h1"
-            variant="h5"
-            sx={{ padding: "20px", margin: "10px", fontFamily: "Calistoga" }}
-          >
-            Welcome Back!
-          </Typography>
           <Box
             sx={{
+              my: 8,
+              mx: 4,
               display: "flex",
-              justifyContent: "space-between",
-              width: "100%",
+              flexDirection: "column",
+              alignItems: "center",
+              borderRadius: 1,
             }}
           >
-            <FormGrid sx={{ flexGrow: 1 }}>
-              <FormLabel htmlFor="userName" sx={{ fontFamily: "Calistoga" }}>
-                Username
-              </FormLabel>
-              <OutlinedInput
-                id="userName"
-                name="userName"
-                autoComplete="userName"
-                placeholder=""
-                required
-                onChange={handleChange}
-                // value={userName}
-                // onChange={(event) => {
-                //   setUserName(event.target.value);
-                // }}
-                sx={{ backgroundColor: "white", width: "100%" }}
-              />
-            </FormGrid>
-          </Box>
-          <Box sx={{ display: "flex", width: "100%", padding: "10px" }}>
-            <FormGrid sx={{ flexGrow: 1 }}>
-              <FormLabel htmlFor="password" sx={{ fontFamily: "Calistoga" }}>
-                Password
-              </FormLabel>
-              <OutlinedInput
-                id="password"
-                name="password"
-                autoComplete="password"
-                placeholder=""
-                required
-                onChange={handleChange}
-                // value={password}
-                // error={passwordError}
-                // onBlur={handlePassword}
-                type={showPassword ? "text" : "password"}
-                // onChange={(event) => {
-                //   setPassword(event.target.value);
-                // }}
-                sx={{ backgroundColor: "white", width: "100%" }}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                }
-              />
-            </FormGrid>
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              width: "100%",
-              padding: "10px",
-              justifyContent: "center",
-            }}
-          >
-            <GoogleLogin
+            <Typography
+              component="h1"
+              variant="h5"
+              sx={{ padding: "20px", margin: "10px", fontFamily: "Calistoga" }}
+            >
+              Welcome Back!
+            </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                width: "100%",
+              }}
+            >
+              <FormGrid sx={{ flexGrow: 1 }}>
+                <FormLabel htmlFor="userName" sx={{ fontFamily: "Calistoga" }}>
+                  Username
+                </FormLabel>
+                <OutlinedInput
+                  id="userName"
+                  name="userName"
+                  autoComplete="userName"
+                  placeholder=""
+                  required
+                  onChange={handleChange}
+                  // value={userName}
+                  // onChange={(event) => {
+                  //   setUserName(event.target.value);
+                  // }}
+                  sx={{ backgroundColor: "white", width: "100%" }}
+                />
+              </FormGrid>
+            </Box>
+            <Box sx={{ display: "flex", width: "100%", padding: "10px" }}>
+              <FormGrid sx={{ flexGrow: 1 }}>
+                <FormLabel htmlFor="password" sx={{ fontFamily: "Calistoga" }}>
+                  Password
+                </FormLabel>
+                <OutlinedInput
+                  id="password"
+                  name="password"
+                  autoComplete="password"
+                  placeholder=""
+                  required
+                  onChange={handleChange}
+                  // value={password}
+                  // error={passwordError}
+                  // onBlur={handlePassword}
+                  type={showPassword ? "text" : "password"}
+                  // onChange={(event) => {
+                  //   setPassword(event.target.value);
+                  // }}
+                  sx={{ backgroundColor: "white", width: "100%" }}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                />
+              </FormGrid>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                width: "100%",
+                padding: "10px",
+                justifyContent: "center",
+              }}
+            >
+              {/* <GoogleLogin
               onSuccess={(credentialResponse) => {
                 const credentialResponseDecoded = jwtDecode(
                   credentialResponse.credential
                 );
                 console.log(credentialResponseDecoded);
-                navigate("/Chatbot");
+                navigate("/Dashboard");
               }}
               onError={() => {
                 console.log("Login Failed");
               }}
-            />
-          </Box>
+            /> */}
 
-          <Box
-            sx={{
-              display: "flex",
-              width: "100%",
-              justifyContent: "flex-start",
-            }}
-          >
-            <FormControlLabel
-              control={<Checkbox name="saveInfo" />}
-              label="Remember me"
-            />
-          </Box>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{
-              mt: 2,
-              mb: 2,
-              height: "63px",
-              width: "243px",
-              backgroundColor: "#176087",
-              "&:hover": {
-                backgroundColor: "#14506E",
-              },
-              fontFamily: "Calistoga",
-            }}
-            onClick={handleLogin}
-          >
-            Login
-          </Button>
-          {/* {formValid && (
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{
+                  mt: 2,
+                  mb: 2,
+                  height: "63px",
+                  width: "243px",
+                  backgroundColor: "#176087",
+                  "&:hover": {
+                    backgroundColor: "#14506E",
+                  },
+                  fontFamily: "Calistoga",
+                }}
+                onClick={googleLogin}
+              >
+                Sign in with Google
+              </Button>
+            </Box>
+
+            <Box
+              sx={{
+                display: "flex",
+                width: "100%",
+                justifyContent: "flex-start",
+              }}
+            >
+              <FormControlLabel
+                control={<Checkbox name="saveInfo" />}
+                label="Remember me"
+              />
+            </Box>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{
+                mt: 2,
+                mb: 2,
+                height: "63px",
+                width: "243px",
+                backgroundColor: "#176087",
+                "&:hover": {
+                  backgroundColor: "#14506E",
+                },
+                fontFamily: "Calistoga",
+              }}
+              onClick={handleLogin}
+            >
+              Login
+            </Button>
+            {/* {formValid && (
             <Stack sx={{ width: "100%", paddingTop: "10px" }} spacing={2}>
               <Alert severity="error" size="small">
                 {formValid}
@@ -289,26 +367,29 @@ export default function Login() {
             </Stack>
           )} */}
 
-          {success && (
-            <Stack sx={{ width: "100%", paddingTop: "10px" }} spacing={2}>
-              <Alert severity="success" size="small">
-                {success}
-              </Alert>
-            </Stack>
-          )}
-          <Grid item xs>
-            <Typography sx={{ fontFamily: "Calistoga" }}>
-              <Link to="/PasswordReset">Forgot Password?</Link>
-            </Typography>
-          </Grid>
-          <Grid item>
-            <Typography sx={{ fontFamily: "Calistoga" }}>
-              Don't have an account?
-              <Link to="/Register"> Register here</Link>
-            </Typography>
-          </Grid>
-        </Box>
+            {success && (
+              <Stack sx={{ width: "100%", paddingTop: "10px" }} spacing={2}>
+                <Alert severity="error" size="small">
+                  {success}
+                </Alert>
+              </Stack>
+            )}
+            <Grid item xs>
+              <Typography sx={{ fontFamily: "Calistoga" }}>
+                <Link to="/PasswordReset">Forgot Password?</Link>
+              </Typography>
+            </Grid>
+            <Grid item>
+              <Typography sx={{ fontFamily: "Calistoga" }}>
+                Don't have an account?
+                <Link to="/Register"> Register here</Link>
+              </Typography>
+            </Grid>
+          </Box>
+        </Grid>
       </Grid>
-    </Grid>
-  );
+    );
+  }
+
+  return <Navigate to={"/Dashboard"} />;
 }
