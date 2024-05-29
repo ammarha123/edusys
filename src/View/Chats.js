@@ -106,10 +106,26 @@ export default function ChatbotFrontEnd() {
 
   const [input, setInput] = useState([]);
 
-  const [testchoice, setTestChoice] = useState([]);
+  const [choice1, setChoice1] = useState([
+    "Visual",
+    "Verbal",
+    "Active",
+    "Reflective",
+    "Intuitive",
+    "Sensitive",
+    "Sequential",
+    "Global",
+  ]);
+
+  const [choice2, setChoice2] = useState([
+    "Lesson Plan",
+    "Exercise",
+    "Teaching Strategies",
+    "Environment",
+  ]);
 
   const handleSelect = (u) => {
-    setTestChoice(["LO", "Exercise", "Teaching Strategies", "Environment"]);
+    // setChoice2(["LO", "Exercise", "Teaching Strategies", "Environment"]);
 
     dispatch({ type: "CHANGE_USER", payload: u });
     setidl(u);
@@ -182,7 +198,8 @@ export default function ChatbotFrontEnd() {
   ];
 
   const newChat = async (e) => {
-    const mess = "Test";
+    const mess =
+      "Hello. Welcome to EduSys. Please choose an learning styles option below?";
     const ChatId = await addDoc(collection(db, "History"), {
       Username: isAuth,
       Date: serverTimestamp(),
@@ -198,7 +215,15 @@ export default function ChatbotFrontEnd() {
       Id: ChatId.id,
     });
 
-    await setDoc(doc(db, "Chats", ChatId.id), { messages: [] });
+    await setDoc(doc(db, "Chats", ChatId.id), {
+      // messages: []
+      messages: arrayUnion({
+        id: uuid(),
+        text: mess,
+        senderId: 1,
+        date: Timestamp.now(),
+      }),
+    });
   };
 
   const drawer = (
@@ -385,6 +410,7 @@ export default function ChatbotFrontEnd() {
     //   },
     // ]);
     setMessageInput(content);
+    setNewMessage(content);
 
     // TODO: post the request to Back4app
   };
@@ -399,60 +425,117 @@ export default function ChatbotFrontEnd() {
   const { currentUser } = useContext(AuthContext);
   const { data1 } = useContext(ChatContext);
 
+  const [newMessage, setNewMessage] = useState("");
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     sendMessage(messageInput);
     setMessageInput("");
 
-    const response = await axios({
-      url: "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyDMd1u72JRH-_T6Fc_8BZP_SOtLo6yNLS4",
-      method: "post",
-      data: { contents: [{ parts: [{ text: messageInput }] }] },
-    });
+    if (choice1.includes(messageInput)) {
+      const response = await axios({
+        url: "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyDMd1u72JRH-_T6Fc_8BZP_SOtLo6yNLS4",
+        method: "post",
+        data: {
+          contents: [{ parts: [{ text: messageInput + " learning style" }] }],
+        },
+      });
 
-    const ans =
-      response["data"]["candidates"][0]["content"]["parts"][0]["text"];
+      const ans =
+        response["data"]["candidates"][0]["content"]["parts"][0]["text"];
 
-    await updateDoc(doc(db, "Chats", idl), {
-      messages: arrayUnion({
-        id: uuid(),
-        text: messageInput,
-        senderId: currentUser.uid,
-        date: Timestamp.now(),
-      }),
-    });
+      await updateDoc(doc(db, "Chats", idl), {
+        messages: arrayUnion({
+          id: uuid(),
+          text: messageInput,
+          senderId: currentUser.uid,
+          date: Timestamp.now(),
+        }),
+      });
 
-    await updateDoc(doc(db, "Chats", idl), {
-      messages: arrayUnion({
-        id: uuid(),
-        text: ans,
-        senderId: 1,
-        date: Timestamp.now(),
-      }),
-    });
+      await updateDoc(doc(db, "Chats", idl), {
+        messages: arrayUnion({
+          id: uuid(),
+          text: ans,
+          senderId: 1,
+          date: Timestamp.now(),
+        }),
+      });
 
-    await updateDoc(doc(db, "NewChatwithId", idl), {
-      LastMessage: ans,
-    });
+      await updateDoc(doc(db, "NewChatwithId", idl), {
+        LastMessage: ans,
+      });
 
-    setMessages([
-      ...messages,
-      {
-        content: messageInput,
-        isCustomer: true,
-      },
-      {
-        content:
-          response["data"]["candidates"][0]["content"]["parts"][0]["text"],
-        isCustomer: false,
-      },
-    ]);
+      setMessages([
+        ...messages,
+        {
+          content: messageInput,
+          isCustomer: true,
+        },
+        {
+          content:
+            response["data"]["candidates"][0]["content"]["parts"][0]["text"],
+          isCustomer: false,
+        },
+      ]);
 
-    console.log(
-      response["data"]["candidates"][0]["content"]["parts"][0]["text"]
-    );
-    console.log(answer);
+      console.log(
+        response["data"]["candidates"][0]["content"]["parts"][0]["text"]
+      );
+      console.log(answer);
+      // return;
+    } else {
+      const response = await axios({
+        url: "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyDMd1u72JRH-_T6Fc_8BZP_SOtLo6yNLS4",
+        method: "post",
+        data: { contents: [{ parts: [{ text: messageInput }] }] },
+      });
+
+      const ans =
+        response["data"]["candidates"][0]["content"]["parts"][0]["text"];
+
+      await updateDoc(doc(db, "Chats", idl), {
+        messages: arrayUnion({
+          id: uuid(),
+          text: messageInput,
+          senderId: currentUser.uid,
+          date: Timestamp.now(),
+        }),
+      });
+
+      await updateDoc(doc(db, "Chats", idl), {
+        messages: arrayUnion({
+          id: uuid(),
+          text: ans,
+          senderId: 1,
+          date: Timestamp.now(),
+        }),
+      });
+
+      await updateDoc(doc(db, "NewChatwithId", idl), {
+        LastMessage: ans,
+      });
+
+      setMessages([
+        ...messages,
+        {
+          content: messageInput,
+          isCustomer: true,
+        },
+        {
+          content:
+            response["data"]["candidates"][0]["content"]["parts"][0]["text"],
+          isCustomer: false,
+        },
+      ]);
+
+      console.log(
+        response["data"]["candidates"][0]["content"]["parts"][0]["text"]
+      );
+      console.log(answer);
+      // return;
+    }
   };
 
   return (
@@ -542,7 +625,12 @@ export default function ChatbotFrontEnd() {
                   content={item.text}
                   // image={message.image}
                   isCustomer={item.senderId === 1 ? false : true}
-                  choices={testchoice}
+                  choices={
+                    item.text ===
+                    "Hello. Welcome to EduSys. Please choose an learning styles option below?"
+                      ? choice1
+                      : choice2
+                  }
                   handleChoice={sendMessage}
                 />
                 // <ListItem key={index} sx={{ py: 0 }}>

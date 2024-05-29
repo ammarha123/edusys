@@ -38,35 +38,23 @@ const isEmail = (email) =>
 
 export default function Register() {
   // Real
-  const [inputs, setInputs] = React.useState({
-    fullName: "",
-    userName: "",
-    email: "",
-    password: "",
-  });
-
-  const [fullName, setfullName] = React.useState("");
-  const [userName, setUserName] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [confirmPassword, setConfirmPassword] = React.useState("");
-
   const [emailError, setEmailError] = React.useState(false);
   const [passwordError, setPasswordError] = React.useState(false);
   const [confirmPasswordError, setConfirmPasswordError] = React.useState(false);
 
   const [formValid, setFormValid] = React.useState();
 
-  const [err, setErr] = React.useState(false);
-  const [success, setSuccess] = React.useState();
-
-  const handleChange = (e) => {
-    setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
+  const [inputs, setInputs] = React.useState({
+    fullName: "",
+    userName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
 
   const handleEmail = () => {
-    console.log(isEmail(email));
-    if (!isEmail(email)) {
+    console.log(isEmail(inputs.email));
+    if (!isEmail(inputs.email)) {
       setEmailError(true);
       return;
     }
@@ -75,7 +63,11 @@ export default function Register() {
   };
 
   const handlePassword = () => {
-    if (!password || password.length < 6 || password.length > 20) {
+    if (
+      !inputs.password ||
+      inputs.password.length < 6 ||
+      inputs.password.length > 20
+    ) {
       setPasswordError(true);
       return;
     }
@@ -84,7 +76,7 @@ export default function Register() {
   };
 
   const handleConfirmPassword = () => {
-    if (password !== confirmPassword) {
+    if (inputs.password !== inputs.confirmPassword) {
       setConfirmPasswordError(true);
       return;
     }
@@ -92,68 +84,63 @@ export default function Register() {
     setConfirmPasswordError(false);
   };
 
+  const [err, setErr] = React.useState(false);
+  const [success, setSuccess] = React.useState();
+
+  const handleChange = (e) => {
+    setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
   const handleClick = async (e) => {
     e.preventDefault();
     setSuccess(null);
 
-    if (emailError || !email) {
-      setFormValid("Email is Invalid. Please Re-Enter");
-      return;
+    if (emailError || !inputs.email) {
+      setSuccess("Email is Invalid. Please Re-Enter");
+    }
+
+    // If Password error is true
+    if (passwordError || !inputs.password) {
+      setSuccess(
+        "Password is set btw 6 - 20 characters long. Please Re-Enter."
+      );
+    }
+
+    const findUsername = query(dbref, where("Username", "==", inputs.userName));
+
+    const snapshot = await getDocs(findUsername);
+    const usernameFoundArray = snapshot.docs.map((doc) => doc.data);
+
+    if (usernameFoundArray.length > 0) {
+      // alert("Username already exists");
+      // return res.status(500).json("Username exists.");
+      setSuccess("Username already exists. Please choose a different username");
     } else {
-      // If Password error is true
-      if (passwordError || !password) {
-        setFormValid(
-          "Password is set btw 6 - 20 characters long. Please Re-Enter."
-        );
-        return;
+      const findEmail = query(dbref, where("Email", "==", inputs.email));
+
+      const snapshot = await getDocs(findEmail);
+      const emailFoundArray = snapshot.docs.map((doc) => doc.data);
+
+      if (emailFoundArray.length > 0) {
+        // alert("Email already exists");
+        // return res.status(501).json("Email exists.");
+        setSuccess("Email already exists. Please choose a different username");
       } else {
-        if (confirmPasswordError || !confirmPassword) {
-          setFormValid("Password does not match. Please Re-Enter");
-          return;
-        } else {
-          const findUsername = query(dbref, where("Username", "==", userName));
+        const res = await createUserWithEmailAndPassword(
+          auth,
+          inputs.email,
+          inputs.password
+        );
 
-          const snapshot = await getDocs(findUsername);
-          const usernameFoundArray = snapshot.docs.map((doc) => doc.data);
-
-          if (usernameFoundArray.length > 0) {
-            // alert("Username already exists");
-            // return res.status(500).json("Username exists.");
-            setFormValid(
-              "Username already exists. Please choose a different username"
-            );
-          } else {
-            const findEmail = query(dbref, where("Email", "==", email));
-
-            const snapshot = await getDocs(findEmail);
-            const emailFoundArray = snapshot.docs.map((doc) => doc.data);
-
-            if (emailFoundArray.length > 0) {
-              // alert("Email already exists");
-              // return res.status(501).json("Email exists.");
-              setFormValid(
-                "Email already exists. Please choose a different username"
-              );
-            } else {
-              const res = await createUserWithEmailAndPassword(
-                auth,
-                email,
-                password
-              );
-
-              await addDoc(dbref, {
-                Name: fullName,
-                Username: userName,
-                Email: email,
-                Password: password,
-                UID: res.user.uid,
-              });
-              // return res.status(200).json("User has been created.");
-              setFormValid(null);
-              setSuccess("Registration succcessful.");
-            }
-          }
-        }
+        await addDoc(dbref, {
+          Name: inputs.fullName,
+          Username: inputs.userName,
+          Email: inputs.email,
+          Password: inputs.password,
+          UID: res.user.uid,
+        });
+        // return res.status(200).json("User has been created.");
+        setSuccess("Registration succcessful.");
       }
     }
 
@@ -257,11 +244,11 @@ export default function Register() {
   //     return;
   //   }
 
-  // if (confirmPasswordError || !confirmPassword) {
-  //   setFormValid("Password does not match. Please Re-Enter");
-  //   return;
-  // }
-  // setFormValid(null);
+  //   if (confirmPasswordError || !confirmPassword) {
+  //     setFormValid("Password does not match. Please Re-Enter");
+  //     return;
+  //   }
+  //   setFormValid(null);
 
   //   // Proceed to use the information passed
   //   console.log("Full Name : " + fullName);
@@ -339,11 +326,11 @@ export default function Register() {
                 autoComplete="fullName"
                 placeholder=""
                 required
-                value={fullName}
-                // onChange={handleChange}
-                onChange={(event) => {
-                  setfullName(event.target.value);
-                }}
+                // value={fullName}
+                onChange={handleChange}
+                // onChange={(event) => {
+                //   setfullName(event.target.value);
+                // }}
                 sx={{ backgroundColor: "white", width: "100%" }}
               />
             </FormGrid>
@@ -357,11 +344,11 @@ export default function Register() {
                 autoComplete="username"
                 placeholder=""
                 required
-                value={userName}
-                // onChange={handleChange}
-                onChange={(event) => {
-                  setUserName(event.target.value);
-                }}
+                // value={userName}
+                onChange={handleChange}
+                // onChange={(event) => {
+                //   setUserName(event.target.value);
+                // }}
                 sx={{ backgroundColor: "white", width: "100%" }}
               />
             </FormGrid>
@@ -375,13 +362,13 @@ export default function Register() {
                 autoComplete="Email"
                 placeholder=""
                 required
-                value={email}
-                // onChange={handleChange}
-                error={emailError}
-                onBlur={handleEmail}
-                onChange={(event) => {
-                  setEmail(event.target.value);
-                }}
+                // value={email}
+                onChange={handleChange}
+                // error={emailError}
+                // onBlur={handleEmail}
+                // onChange={(event) => {
+                //   setEmail(event.target.value);
+                // }}
                 sx={{ backgroundColor: "white", width: "100%" }}
               />
             </FormGrid>
@@ -395,14 +382,14 @@ export default function Register() {
                 autoComplete="password"
                 placeholder=""
                 required
-                value={password}
-                // onChange={handleChange}
-                error={passwordError}
-                onBlur={handlePassword}
+                // value={password}
+                onChange={handleChange}
+                // error={passwordError}
+                // onBlur={handlePassword}
                 type={showPassword ? "text" : "password"}
-                onChange={(event) => {
-                  setPassword(event.target.value);
-                }}
+                // onChange={(event) => {
+                //   setPassword(event.target.value);
+                // }}
                 sx={{ backgroundColor: "white", width: "100%" }}
                 endAdornment={
                   <InputAdornment position="end">
@@ -425,17 +412,18 @@ export default function Register() {
               </FormLabel>
               <OutlinedInput
                 id="confirmPassword"
+                name="confirmPassword"
                 autoComplete="confirmPassword"
                 placeholder=""
                 required
-                value={confirmPassword}
-                // onChange={handleChange}
-                error={confirmPasswordError}
-                onBlur={handleConfirmPassword}
-                type={showConfirmPassword ? "text" : "password"}
-                onChange={(event) => {
-                  setConfirmPassword(event.target.value);
-                }}
+                // value={confirmPassword}
+                onChange={handleChange}
+                // error={confirmPasswordError}
+                // onBlur={handleConfirmPassword}
+                type={showConfirmPassword ? "text" : "confirmPassword"}
+                // onChange={(event) => {
+                //   setConfirmPassword(event.target.value);
+                // }}
                 sx={{ backgroundColor: "white", width: "100%" }}
                 endAdornment={
                   <InputAdornment position="end">
@@ -470,13 +458,13 @@ export default function Register() {
           >
             Register
           </Button>
-          {formValid && (
+          {/* {formValid && (
             <Stack sx={{ width: "100%", paddingTop: "10px" }} spacing={2}>
               <Alert severity="error" size="small">
                 {formValid}
               </Alert>
             </Stack>
-          )}
+          )} */}
 
           {success && (
             <Stack sx={{ width: "100%", paddingTop: "10px" }} spacing={2}>

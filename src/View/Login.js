@@ -45,7 +45,7 @@ const FormGrid = styled("div")(() => ({
 
 export default function Login() {
   const [inputs, setInputs] = React.useState({
-    userName: "",
+    email: "",
     password: "",
   });
 
@@ -67,7 +67,7 @@ export default function Login() {
     e.preventDefault();
     setSuccess(null);
 
-    const emailMatch = query(dbref, where("Username", "==", inputs.userName));
+    const emailMatch = query(dbref, where("Email", "==", inputs.email));
     const emailSnapshot = await getDocs(emailMatch);
     const emailArray = emailSnapshot.docs.map((doc) => doc.data());
     const passwordMatch = query(
@@ -108,8 +108,9 @@ export default function Login() {
       setIsAuth(true);
       await setDoc(doc(db, "Auth", result.user.uid), {
         Name: result.user.displayName,
-        Username: result.user.uid,
+        Username: result.user.displayName,
         Email: result.user.email,
+        UID: result.user.uid,
       });
       console.log(result);
     } catch (err) {
@@ -234,13 +235,13 @@ export default function Login() {
               }}
             >
               <FormGrid sx={{ flexGrow: 1 }}>
-                <FormLabel htmlFor="userName" sx={{ fontFamily: "Calistoga" }}>
-                  Username
+                <FormLabel htmlFor="email" sx={{ fontFamily: "Calistoga" }}>
+                  Email
                 </FormLabel>
                 <OutlinedInput
-                  id="userName"
-                  name="userName"
-                  autoComplete="userName"
+                  id="email"
+                  name="email"
+                  autoComplete="email"
                   placeholder=""
                   required
                   onChange={handleChange}
