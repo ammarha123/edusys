@@ -72,6 +72,7 @@ export default function ChatbotFrontEnd() {
 
   const [chats, setChatHistory] = React.useState([]);
   const { dispatch } = React.useContext(ChatContext);
+  const [idl, setidl] = React.useState();
 
   useEffect(() => {
     const getChatHistory = () => {
@@ -103,9 +104,42 @@ export default function ChatbotFrontEnd() {
     isAuth && getChatHistory();
   }, [isAuth]);
 
+  const [input, setInput] = useState([]);
+
   const handleSelect = (u) => {
     dispatch({ type: "CHANGE_USER", payload: u });
+    setidl(u);
+
+    const unSub = onSnapshot(doc(db, "Chats", u), (doc) => {
+      doc.exists() && setInput(doc.data().messages);
+
+      const mylist = input.map((item, index) => {
+        if (item.senderId === 1) {
+          setMessages([
+            ...messages,
+            {
+              content: item.text,
+              isCustomer: false,
+            },
+          ]);
+        } else {
+          setMessages([
+            ...messages,
+            {
+              content: item.text,
+              isCustomer: true,
+            },
+          ]);
+        }
+      });
+    });
+
+    return () => {
+      unSub();
+    };
   };
+
+  console.log(input);
 
   const History = [
     {
@@ -126,8 +160,6 @@ export default function ChatbotFrontEnd() {
     },
   ];
 
-  const [idl, setidl] = React.useState();
-
   const newChat = async (e) => {
     const mess = "Test";
     const ChatId = await addDoc(collection(db, "History"), {
@@ -136,7 +168,7 @@ export default function ChatbotFrontEnd() {
       LastMessage: mess,
     });
 
-    setidl(ChatId.id);
+    // setidl(ChatId.id);
 
     await setDoc(doc(db, "NewChatwithId", ChatId.id), {
       Username: isAuth,
@@ -238,7 +270,7 @@ export default function ChatbotFrontEnd() {
                 }
                 secondary={
                   <Typography variant="body2" sx={{ fontFamily: "Calistoga" }}>
-                    {item.LastMessage}
+                    {item.Username}
                   </Typography>
                 }
               />
@@ -482,6 +514,23 @@ export default function ChatbotFrontEnd() {
                   handleChoice={sendMessage}
                 />
               ))}
+
+              {/* {input.map((item, index) => (
+                <ListItem key={index} sx={{ py: 0 }}>
+                  <ListItemButton>
+                    <ListItemText
+                      primary={
+                        <Typography
+                          variant="body2"
+                          sx={{ fontFamily: "Calistoga" }}
+                        >
+                          {item.text}
+                        </Typography>
+                      }
+                    />
+                  </ListItemButton>
+                </ListItem>
+              ))} */}
             </Box>
           </Box>
           <Box
