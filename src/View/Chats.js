@@ -106,32 +106,53 @@ export default function ChatbotFrontEnd() {
 
   const [input, setInput] = useState([]);
 
+  const [testchoice, setTestChoice] = useState([]);
+
   const handleSelect = (u) => {
+    setTestChoice(["LO", "Exercise", "Teaching Strategies", "Environment"]);
+
     dispatch({ type: "CHANGE_USER", payload: u });
     setidl(u);
 
     const unSub = onSnapshot(doc(db, "Chats", u), (doc) => {
       doc.exists() && setInput(doc.data().messages);
 
-      const mylist = input.map((item, index) => {
-        if (item.senderId === 1) {
-          setMessages([
-            ...messages,
-            {
-              content: item.text,
-              isCustomer: false,
-            },
-          ]);
-        } else {
-          setMessages([
-            ...messages,
-            {
-              content: item.text,
-              isCustomer: true,
-            },
-          ]);
-        }
-      });
+      // const mylist = input.map((item, index) => {
+      //   <li key={index}>
+      //     if (item.senderId === 1)
+      //     {setMessages([
+      //       ...messages,
+      //       {
+      //         content: item.text,
+      //         isCustomer: false,
+      //       },
+      //     ])}
+      //     {setMessages([
+      //       ...messages,
+      //       {
+      //         content: item.text,
+      //         isCustomer: true,
+      //       },
+      //     ])}
+      //   </li>;
+      //   // if (item.senderId === 1) {
+      //   //   setMessages([
+      //   //     ...messages,
+      //   //     {
+      //   //       content: item.text,
+      //   //       isCustomer: false,
+      //   //     },
+      //   //   ]);
+      //   // } else {
+      //   //   setMessages([
+      //   //     ...messages,
+      //   //     {
+      //   //       content: item.text,
+      //   //       isCustomer: true,
+      //   //     },
+      //   //   ]);
+      //   // }
+      // });
     });
 
     return () => {
@@ -504,7 +525,7 @@ export default function ChatbotFrontEnd() {
             }}
           >
             <Box sx={{ m: 1, mr: 2 }}>
-              {messages.map((message, index) => (
+              {/* {messages.map((message, index) => (
                 <Message
                   key={index}
                   content={message.content}
@@ -513,24 +534,32 @@ export default function ChatbotFrontEnd() {
                   choices={message.choices}
                   handleChoice={sendMessage}
                 />
-              ))}
-
-              {/* {input.map((item, index) => (
-                <ListItem key={index} sx={{ py: 0 }}>
-                  <ListItemButton>
-                    <ListItemText
-                      primary={
-                        <Typography
-                          variant="body2"
-                          sx={{ fontFamily: "Calistoga" }}
-                        >
-                          {item.text}
-                        </Typography>
-                      }
-                    />
-                  </ListItemButton>
-                </ListItem>
               ))} */}
+
+              {input.map((item, index) => (
+                <Message
+                  key={index}
+                  content={item.text}
+                  // image={message.image}
+                  isCustomer={item.senderId === 1 ? false : true}
+                  choices={testchoice}
+                  handleChoice={sendMessage}
+                />
+                // <ListItem key={index} sx={{ py: 0 }}>
+                //   <ListItemButton>
+                //     <ListItemText
+                //       primary={
+                //         <Typography
+                //           variant="body2"
+                //           sx={{ fontFamily: "Calistoga" }}
+                //         >
+                //           {item.text}
+                //         </Typography>
+                //       }
+                //     />
+                //   </ListItemButton>
+                // </ListItem>
+              ))}
             </Box>
           </Box>
           <Box
