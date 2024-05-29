@@ -7,6 +7,7 @@ import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import cover from '../assets/34371991_v228-wit-02a-job58.jpg'
+import AllNotes from './Notes/pages/AllNotes/AllNotes';
 
 const StyledCard = styled(Card)`
   margin-bottom: 16px;
@@ -46,8 +47,6 @@ export default function Dashboard() {
                 sx={{
 
                     backgroundColor: '#53A2BE',
-                    backgroundSize: 'cover',
-                    backgroundRepeat: 'no-repeat',
                     display: 'flex',
                     p: '40px'
                 }}
@@ -58,7 +57,7 @@ export default function Dashboard() {
                         flexDirection: { xs: 'column', md: 'row' },
                         alignItems: 'center',
                         p: 2,
-                        mx: '90px'
+                        mx: '60px'
                     }}
                 >
                     <Avatar alt="Profile Picture" src="/path/to/profile-picture.jpg" />
@@ -76,12 +75,11 @@ export default function Dashboard() {
             <Box
                 sx={{
                     backgroundColor: '#53A2BE',
-                    backgroundSize: 'cover',
-                    backgroundRepeat: 'no-repeat',
+                 
                     display: 'flex',
                     flexDirection: 'column',
                     flex: 1,
-                    height: '100vh',
+                  
                     paddingTop: '40px'
                 }}
             >
@@ -174,7 +172,7 @@ export default function Dashboard() {
                             width: '100%'
                         }}
                     >
-                        {noteList.map((note, index) => (
+                        {/* {noteList.map((note, index) => (
                             <StyledCard key={index}>
                                 <CardContent>
                                     <Box sx={{
@@ -195,7 +193,8 @@ export default function Dashboard() {
                                     </Typography>
                                 </CardContent>
                             </StyledCard>
-                        ))}
+                        ))} */}
+                        <AllNotes/>
                     </Box>
                 </Box>
             </Box>
