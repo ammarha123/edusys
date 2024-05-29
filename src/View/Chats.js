@@ -224,7 +224,8 @@ export default function ChatbotFrontEnd() {
           mx: 1,
         }}
       >
-        <Link to="/Editor" style={{ textDecoration: "none" }}>
+        {/* <Link to="/Editor" style={{ textDecoration: "none" }}> */}
+         <Link to="/notes" style={{ textDecoration: "none" }}>
           <Button
             type="submit"
             fullWidth
@@ -247,7 +248,9 @@ export default function ChatbotFrontEnd() {
           </Button>
         </Link>
       </Box>
+      
       <Divider />
+
       <List>
         <Typography
           variant="h6"
