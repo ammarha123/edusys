@@ -3,6 +3,8 @@ import React from 'react';
 import { Box, Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Grid, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import img1 from '../assets/34371991_v228-wit-02a-job58.jpg'
+import img2 from '../assets/6-Effective-Visual-Learner-Strategies-.jpeg'
+import img3 from '../assets/i83770283.jpg.webp'
 
 const StyledCard = styled(Card)`
   margin-bottom: 16px;
@@ -15,14 +17,14 @@ const blogPosts = [
         date: "10 June 2024",
         snippet: "Personalized learning tailors education to meet the different needs of students...",
         link: "https://www.understood.org/en/articles/personalized-learning-what-you-need-to-know",
-        img: img1
+        img: img3
     },
     {
         title: "5 Tips for Visual Learners",
         date: "1 June 2024",
         snippet: "Visual learners benefit greatly from diagrams, charts, and videos. Here are 6 tips to help visual learners...",
         link: "https://alexandertutoring.com/math-physics-resources/study-tips/6-effective-visual-learner-strategies/",
-        img: img1
+        img: img2
     },
     {
         title: "How to Create Effective Lesson Plans",
@@ -56,7 +58,7 @@ export default function Blog() {
            <Grid container spacing={2} mt={2}>
             {blogPosts.map((post, index) => (
                 <Grid item xs={12} sm={8} md={4}>
-                <Card key={index}  href={post.link} 
+                <Card key={index}  
                     sx={{
                         
                         textDecoration: 'none',
@@ -64,6 +66,9 @@ export default function Blog() {
                          mx:'10px',
                          mb:'10px'
                     }}
+                     component="a"
+                href={post.link}
+                            target="_blank"
                 >
                     <CardActionArea>
                         <CardMedia
@@ -77,7 +82,7 @@ export default function Blog() {
                                 {post.title}
                             </Typography>
                             <Typography variant="body2" sx={{ fontFamily: 'Calistoga', color: '#757575' }}>
-                                {post.date}
+                                {/* {post.date} */}
                             </Typography>
                             <Typography variant="body2" sx={{ fontFamily: 'Calistoga' }}>
                                 {post.snippet}
