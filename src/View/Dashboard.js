@@ -13,6 +13,9 @@ import Cookies from "universal-cookie";
 import Blog from "./Blog";
 import { db } from "../Components/firebase-config.js";
 import { query, where, collection, getDocs } from "firebase/firestore";
+import SmartToyIcon from '@mui/icons-material/SmartToy';
+import AnalyticsIcon from '@mui/icons-material/Analytics';
+import QuizIcon from '@mui/icons-material/Quiz';
 
 const cookies = new Cookies();
 
@@ -122,72 +125,88 @@ export default function Dashboard() {
             Make the Learning Fun with Edusys
           </Typography>
         </Box>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: { xs: "column", md: "row" },
-            alignItems: "center",
-            p: 2,
-            mx: "90px",
-          }}
-        >
-          <Link to="/Chats" style={{ textDecoration: "none" }}>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              endIcon={<AddCircleIcon sx={{ fontSize: "large" }} />}
-              sx={{
-                mt: 2,
-                mb: 2,
-                height: "63px",
-                width: "243px",
+       <Box
+      sx={{
+        display: "flex",
+        flexDirection: { xs: "column", md: "row" }, // Column for xs (mobile), row for md (desktop)
+        alignItems: "center",
+        justifyContent: "flex-start", // Center items horizontally
+        gap: 2, // Gap between the two buttons
+        mx: "90px",
+        mt: 2, // Margin top for spacing
+        mb:'40px'
+      }}
+    >
+      {/* Button 1: New Chat */}
+      <Box>
+        <Link to="/Chats" style={{ textDecoration: "none" }}>
+          <Button
+            fullWidth
+            variant="contained"
+            endIcon={<SmartToyIcon sx={{ fontSize: "large" }} />}
+            sx={{
+              height: "63px",
+              width: "243px",
+              backgroundColor: "#FFD500",
+              "&:hover": {
                 backgroundColor: "#FFD500",
-                "&:hover": {
-                  backgroundColor: "#FFD500",
-                },
-                fontFamily: "Calistoga",
-                borderRadius: "30px",
-                fontSize: "25px",
-              }}
-            >
-              New Chat
-            </Button>
-          </Link>
-        </Box>
-         <Box
-          sx={{
-            display: "flex",
-            flexDirection: { xs: "column", md: "row" },
-            alignItems: "center",
-            p: 2,
-            mx: "90px",
-          }}
-        >
-          <Link to="/analytics" style={{ textDecoration: "none" }}>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              endIcon={<AddCircleIcon sx={{ fontSize: "large" }} />}
-              sx={{
-                mt: 2,
-                mb: 2,
-                height: "63px",
-                width: "243px",
+              },
+              fontFamily: "Calistoga",
+              borderRadius: "30px",
+              fontSize: "23px",
+            }}
+          >
+            New Chat
+          </Button>
+        </Link>
+      </Box>
+
+      <Box>
+        <Link to="/analytics" style={{ textDecoration: "none" }}>
+          <Button
+            fullWidth
+            variant="contained"
+            endIcon={<AnalyticsIcon sx={{ fontSize: "large" }} />}
+            sx={{
+              height: "63px",
+              width: "243px",
+              backgroundColor: "#FFD500",
+              "&:hover": {
                 backgroundColor: "#FFD500",
-                "&:hover": {
-                  backgroundColor: "#FFD500",
-                },
-                fontFamily: "Calistoga",
-                borderRadius: "30px",
-                fontSize: "25px",
-              }}
-            >
-              Analytics
-            </Button>
-          </Link>
-        </Box>
+              },
+              fontFamily: "Calistoga",
+              borderRadius: "30px",
+              fontSize: "23px",
+            }}
+          >
+            Analytics
+          </Button>
+        </Link>
+      </Box>
+        <Box>
+        <Link to="https://learningstyles.webtools.ncsu.edu" style={{ textDecoration: "none" }}>
+          <Button
+            fullWidth
+            variant="contained"
+            endIcon={<QuizIcon sx={{ fontSize: "large" }} />}
+            sx={{
+              height: "63px",
+              width: "243px",
+              backgroundColor: "#FFD500",
+              "&:hover": {
+                backgroundColor: "#FFD500",
+              },
+              fontFamily: "Calistoga",
+              borderRadius: "30px",
+              fontSize: "23px",
+            }}
+          >
+            Learning Test
+          </Button>
+        </Link>
+      </Box>
+    </Box>
+
         <Box
         sx={{mb: '40px'}}>
           <Box

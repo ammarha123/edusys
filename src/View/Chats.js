@@ -43,6 +43,9 @@ import Cookies from "universal-cookie";
 import { ChatContext } from "./ChatContext.js";
 import { v4 as uuid } from "uuid";
 import { AuthContext } from "../context/authContext.js";
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import Avatar from "@mui/material/Avatar";
+
 
 const chatDB = collection(db, "ChatID");
 
@@ -69,6 +72,8 @@ export default function ChatbotFrontEnd() {
       setMobileOpen(!mobileOpen);
     }
   };
+
+ 
 
   const [chats, setChatHistory] = React.useState([]);
   const { dispatch } = React.useContext(ChatContext);
@@ -267,6 +272,7 @@ export default function ChatbotFrontEnd() {
   const drawer = (
     <div>
       <Toolbar />
+       
       <Divider />
       <Box
         sx={{
@@ -347,7 +353,7 @@ export default function ChatbotFrontEnd() {
             type="submit"
             fullWidth
             variant="contained"
-            startIcon={<EditNoteIcon sx={{ fontSize: "large" }} />}
+            startIcon={<DashboardIcon sx={{ fontSize: "large" }} />}
             sx={{
               mt: 2,
               mb: 2,
@@ -376,7 +382,8 @@ export default function ChatbotFrontEnd() {
           Chat History
         </Typography>
         {chats.map((item, index) => (
-          <ListItem key={index} sx={{ py: 0 }}>
+        <Link key={index} to={`/Chats/${item.Id}`} style={{ textDecoration: "none" }}>
+          <ListItem sx={{ py: 0 }} component="div">
             <ListItemButton>
               <ListItemText
                 onClick={() => {
@@ -397,6 +404,7 @@ export default function ChatbotFrontEnd() {
               />
             </ListItemButton>
           </ListItem>
+        </Link>
         ))}
 
         {/* {Array(chats)
@@ -870,17 +878,7 @@ const chatDisplay = (c) => {
             }}
           >
             <Box sx={{ m: 1, mr: 2 }}>
-              {/* {messages.map((message, index) => (
-                <Message
-                  key={index}
-                  content={message.content}
-                  image={message.image}
-                  isCustomer={message.isCustomer}
-                  choices={message.choices}
-                  handleChoice={sendMessage}
-                />
-              ))} */}
-
+              
               {input.map((item, index) => (
                 <Message
                   key={index}
@@ -907,20 +905,6 @@ const chatDisplay = (c) => {
                   }
                   handleChoice={sendMessage}
                 />
-                // <ListItem key={index} sx={{ py: 0 }}>
-                //   <ListItemButton>
-                //     <ListItemText
-                //       primary={
-                //         <Typography
-                //           variant="body2"
-                //           sx={{ fontFamily: "Calistoga" }}
-                //         >
-                //           {item.text}
-                //         </Typography>
-                //       }
-                //     />
-                //   </ListItemButton>
-                // </ListItem>
               ))}
             </Box>
           </Box>

@@ -22,6 +22,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useSelector } from "react-redux";
 import { CreateNoteModal, TagsModal } from "./View/Notes/components";
+import Analytics from "./View/Analytics";
 
 function App() {
   const { currentUser } = useContext(AuthContext);
@@ -47,8 +48,13 @@ function App() {
         <Route path="/Register" element={<Register />}></Route>
         <Route path="/PasswordReset" element={<ForgotPassword />}></Route>
         <Route path="/dashboard" element={<Dashboard />}></Route>
-        <Route path="/Chatbot" element={<ChatbotFrontEnd />}></Route>
+        {/* <Route path="/Chatbot" element={<ChatbotFrontEnd />}></Route> */}
         <Route path="/Chats" element={<Chats />}></Route>
+        <Route path="/Chats/:id" element={<Chats />}></Route>
+        <Route path="/analytics" element={<Analytics />}></Route>
+
+        {/* <Route path="/Chats/:idl" element={<Chats />}></Route> */}
+
      
         <Route path="/notes" element={<AllNotes />} ></Route>
          <Route path="/tag/:name" element={<TagNotes />} />
