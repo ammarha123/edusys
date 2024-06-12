@@ -760,38 +760,47 @@ export default function ChatbotFrontEnd() {
   //   }
   // };
 
+
 const chatDisplay = (c) => {
-  const sections = c.split(/\*+\s*/);
+  const sections = c.split('\n').map(section => section.trim());
 
-  const formattedSections = sections
-    .filter(section => section.trim() !== "") // Filter out empty sections
-    .map((section, index) => {
-      const lines = section.split("\n");
-      const formattedLines = lines.map((line, lineIndex) => (
-        <span key={lineIndex}>
-          {line}
-          <br />
-        </span>
-      ));
+  const formattedSections = sections.map((section, index) => {
+    // Check if the section is a bullet point with nested bold text
+    if (section.startsWith('* ') && section.includes('**')) {
+      const boldPart = section.match(/\*\*(.*?)\*\*/)[1]; // Extract the bold text
+      const restPart = section.replace(`**${boldPart}**`, '').slice(2).trim(); // Remove the bold text from the section
+      return (
+        <li key={index}>
+          <b>{boldPart}</b>{restPart}
+        </li>
+      );
+    } 
+    // Check if the section is a bullet point
+    else if (section.startsWith('* ')) {
+      return (
+        <li key={index}>{section.slice(2).trim()}</li>
+      );
+    }
+    // Check if the section has *** or ** formatting
+    else if (section.startsWith('***') && section.endsWith('***')) {
+      return <b key={index}>{section.slice(3, -3).trim()}</b>;
+    } else if (section.startsWith('**') && section.endsWith('**')) {
+      return <b key={index}>{section.slice(2, -2).trim()}</b>;
+    } else {
+      // Handle regular text
+      return <div key={index}>{section}</div>;
+    }
+  });
 
-      if (index % 2 !== 0) {
-        return <b key={index}>{formattedLines}</b>;
-      } else {
-        return formattedLines;
-      }
-    });
-
-  return formattedSections;
+  // Ensure the formattedSections array correctly renders as React components
+  return (
+    <div>
+      {formattedSections}
+    </div>
+  );
 };
 
-
-
-
-
-
-
-  
-  return (
+    return (
     <Box Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar
