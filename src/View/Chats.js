@@ -737,29 +737,60 @@ export default function ChatbotFrontEnd() {
 
   const [resultData, setResultData] = useState("");
 
-  const chatDisplay = (c) => {
-    let responseArray = c.split("**");
-    let newResponse;
+  // const chatDisplay = (c) => {
+  //   let responseArray = c.split("**");
+  //   let newResponse = "";
 
-    if (responseArray[0].length !== 0) {
-      return responseArray[0];
-    } else {
-      for (let i = 0; i < responseArray.length; i++) {
-        if (i === 0 || i % 2 !== 1) {
-          newResponse += responseArray[i];
-        } else {
-          newResponse += "<b>" + responseArray[i] + "</b>";
-        }
+  //   if (responseArray[0].length !== 0) {
+  //     return responseArray[0];
+  //   } else {
+  //     for (let i = 0; i < responseArray.length; i++) {
+  //       if (i === 0 || i % 2 !== 1) {
+  //         newResponse += responseArray[i];
+  //       } else {
+  //         newResponse += "<b>" + responseArray[i] + "</b>";
+  //       }
+  //     }
+
+  //     let newResponse2 = newResponse.split("*").join("</br>");
+  //     let newResponseArray = newResponse2.split(" ");
+  //     for (let i = 0; i < newResponseArray.length; i++) {
+  //       const nextWord = newResponseArray[i];
+  //     }
+  //   }
+  // };
+
+const chatDisplay = (c) => {
+  const sections = c.split(/\*+\s*/);
+
+  const formattedSections = sections
+    .filter(section => section.trim() !== "") // Filter out empty sections
+    .map((section, index) => {
+      const lines = section.split("\n");
+      const formattedLines = lines.map((line, lineIndex) => (
+        <span key={lineIndex}>
+          {line}
+          <br />
+        </span>
+      ));
+
+      if (index % 2 !== 0) {
+        return <b key={index}>{formattedLines}</b>;
+      } else {
+        return formattedLines;
       }
+    });
 
-      let newResponse2 = newResponse.split("*").join("</br>");
-      let newResponseArray = newResponse2.split(" ");
-      for (let i = 0; i < newResponseArray.length; i++) {
-        const nextWord = newResponseArray[i];
-      }
-    }
-  };
+  return formattedSections;
+};
 
+
+
+
+
+
+
+  
   return (
     <Box Box sx={{ display: "flex" }}>
       <CssBaseline />
