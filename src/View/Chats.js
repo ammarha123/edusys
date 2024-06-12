@@ -322,6 +322,39 @@ export default function ChatbotFrontEnd() {
         </Link>
       </Box>
 
+       <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          mx: 1,
+        }}
+      >
+        {/* <Link to="/Editor" style={{ textDecoration: "none" }}> */}
+        <Link to="/dashboard" style={{ textDecoration: "none" }}>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            startIcon={<EditNoteIcon sx={{ fontSize: "large" }} />}
+            sx={{
+              mt: 2,
+              mb: 2,
+              width: "200px",
+              backgroundColor: "#FFD500",
+              "&:hover": {
+                backgroundColor: "#FFD500",
+              },
+              fontFamily: "Calistoga",
+              borderRadius: "30px",
+              fontSize: "18px",
+            }}
+          >
+           Dashboard
+          </Button>
+        </Link>
+      </Box>
+
       <Divider />
 
       <List>

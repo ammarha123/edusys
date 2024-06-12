@@ -59,6 +59,7 @@ export default function Dashboard() {
             alignItems: "center",
             p: 2,
             mx: "60px",
+            
           }}
         >
           <Avatar alt="Profile Picture" src="/path/to/profile-picture.jpg" />
@@ -113,7 +114,7 @@ export default function Dashboard() {
             mx: "90px",
           }}
         >
-          <Link to="/Chatbot" style={{ textDecoration: "none" }}>
+          <Link to="/Chats" style={{ textDecoration: "none" }}>
             <Button
               type="submit"
               fullWidth
@@ -137,7 +138,41 @@ export default function Dashboard() {
             </Button>
           </Link>
         </Box>
-        <Box>
+         <Box
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", md: "row" },
+            alignItems: "center",
+            p: 2,
+            mx: "90px",
+          }}
+        >
+          <Link to="/analytics" style={{ textDecoration: "none" }}>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              endIcon={<AddCircleIcon sx={{ fontSize: "large" }} />}
+              sx={{
+                mt: 2,
+                mb: 2,
+                height: "63px",
+                width: "243px",
+                backgroundColor: "#FFD500",
+                "&:hover": {
+                  backgroundColor: "#FFD500",
+                },
+                fontFamily: "Calistoga",
+                borderRadius: "30px",
+                fontSize: "25px",
+              }}
+            >
+              Analytics
+            </Button>
+          </Link>
+        </Box>
+        <Box
+        sx={{mb: '40px'}}>
           <Box
             sx={{
               display: "flex",
@@ -179,30 +214,23 @@ export default function Dashboard() {
                 width: "100%",
               }}
             >
-              {/* {noteList.map((note, index) => (
-                            <StyledCard key={index}>
-                                <CardContent>
-                                    <Box sx={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        flexDirection: 'column',
-                                        width: '100%',
-                                        height: 'auto',
-                                    }}>
-                                        <img src={note.img} alt={note.title} style={{ width: '200px', height: 'auto', objectFit: 'cover' }} />
-                                        <Typography variant="h5" component="h2" sx={{ fontFamily: 'Calistoga', }}>
-                                            {note.title}
-                                        </Typography>
-                                    </Box>
-                                    <Typography variant="body2" sx={{ fontFamily: 'Calistoga', }}>
-                                        {note.date}
-                                    </Typography>
-                                </CardContent>
-                            </StyledCard>
-                        ))} */}
               <AllNotes />
             </Box>
+          </Box>
+
+           <Box
+            sx={{
+              display: "flex",
+              flexDirection: { xs: "column", md: "row" },
+              alignItems: "center",
+              p: 2,
+              mx: "90px",
+              backgroundColor: "#176087",
+              borderRadius: "10px",
+              mt: '40px'
+            }}
+          >
+          <Blog/>
           </Box>
         </Box>
       </Box>
