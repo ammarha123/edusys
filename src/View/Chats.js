@@ -253,6 +253,17 @@ export default function ChatbotFrontEnd() {
     });
   };
 
+  const historyDisplay = (h) => {
+    let responseArray = h.split("**");
+    if (responseArray[0].length === 0) {
+      // console.log(responseArray[1]);
+      return responseArray[1];
+    } else {
+      // console.log(responseArray[0]);
+      return responseArray[0];
+    }
+  };
+
   const drawer = (
     <div>
       <Toolbar />
@@ -379,7 +390,8 @@ export default function ChatbotFrontEnd() {
                 }
                 secondary={
                   <Typography variant="body2" sx={{ fontFamily: "Calistoga" }}>
-                    {item.Username}
+                    {/* {item.LastMessage} */}
+                    {historyDisplay(item.LastMessage)}
                   </Typography>
                 }
               />
@@ -723,6 +735,31 @@ export default function ChatbotFrontEnd() {
     }
   };
 
+  const [resultData, setResultData] = useState("");
+
+  const chatDisplay = (c) => {
+    let responseArray = c.split("**");
+    let newResponse;
+
+    if (responseArray[0].length !== 0) {
+      return responseArray[0];
+    } else {
+      for (let i = 0; i < responseArray.length; i++) {
+        if (i === 0 || i % 2 !== 1) {
+          newResponse += responseArray[i];
+        } else {
+          newResponse += "<b>" + responseArray[i] + "</b>";
+        }
+      }
+
+      let newResponse2 = newResponse.split("*").join("</br>");
+      let newResponseArray = newResponse2.split(" ");
+      for (let i = 0; i < newResponseArray.length; i++) {
+        const nextWord = newResponseArray[i];
+      }
+    }
+  };
+
   return (
     <Box Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -807,7 +844,10 @@ export default function ChatbotFrontEnd() {
               {input.map((item, index) => (
                 <Message
                   key={index}
-                  content={item.text}
+                  content={
+                    item.senderId === 1 ? chatDisplay(item.text) : item.text
+                  }
+                  // content={item.text}
                   // image={message.image}
                   isCustomer={item.senderId === 1 ? false : true}
                   choices={
