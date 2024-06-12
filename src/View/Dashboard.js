@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import Avatar from "@mui/material/Avatar";
 import { Card, CardContent, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -11,6 +11,8 @@ import AllNotes from "./Notes/pages/AllNotes/AllNotes";
 import { AuthContext } from "../context/authContext.js";
 import Cookies from "universal-cookie";
 import Blog from "./Blog";
+import { db } from "../Components/firebase-config.js";
+import { query, where, collection, getDocs } from "firebase/firestore";
 
 const cookies = new Cookies();
 
@@ -41,7 +43,22 @@ const noteList = [
   },
 ];
 
+const dbref = collection(db, "Auth");
+
 export default function Dashboard() {
+  const [isAuth, setIsAuth] = React.useState(cookies.get("auth-token"));
+
+  const { currentUser } = useContext(AuthContext);
+
+  // const handleLogin = async (e) => {
+  //   const emailMatch = query(dbref, where("Email", "==", isAuth));
+  //   const emailSnapshot = await getDocs(emailMatch);
+  //   const emailArray = emailSnapshot.docs.map((doc) => doc.data());
+  //   return emailArray;
+  // };
+
+  // console.log(currentUser.displayName);
+
   return (
     <>
       <Box
@@ -70,7 +87,7 @@ export default function Dashboard() {
               marginLeft: "16px",
             }}
           >
-            siti khadijah
+            {currentUser.displayName}
           </Typography>
         </Box>
       </Box>
