@@ -12,10 +12,6 @@ import Contact from "./View/Contact";
 import Chats from "./View/Chats";
 import { useContext } from "react";
 import { AuthContext } from "./context/authContext";
-import CreateNote from "./View/Notes/CreateNote";
-import Notes from "./View/Notes/Notes";
-import EditNote from "./View/Notes/EditNote";
-import Note from "./View/Notes/Note";
 import AllNotes from "./View/Notes/pages/AllNotes/AllNotes";
 import ArchiveNotes from "./View/Notes/pages/ArchieveNotes/ArchieveNotes";
 import TrashNotes from "./View/Notes/pages/TrashNotes/TrashNotes";
@@ -53,14 +49,11 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />}></Route>
         <Route path="/Chatbot" element={<ChatbotFrontEnd />}></Route>
         <Route path="/Chats" element={<Chats />}></Route>
-        {/* <Route path="/Editor" element={<Notes/>}></Route>
-        <Route path="/create-editor" element={<CreateNote />}></Route>
-        <Route path="/edit-editor/:id" element={<EditNote />}></Route> */}
-
+     
         <Route path="/notes" element={<AllNotes />} ></Route>
+         <Route path="/tag/:name" element={<TagNotes />} />
         <Route path="/archive" element={<ArchiveNotes />}> </Route>
         <Route path="/trash" element={<TrashNotes />}> </Route>
-        <Route path="/tag/:name" element={<TagNotes />}> </Route>
         {/* <Route path="/404" element={<ErrorsPage />} /> */}
         {/* <Route path="/*" element={<Navigate to={"/404"} replace />} /> */}
 

@@ -12,6 +12,7 @@ import { AuthContext } from "../context/authContext.js";
 import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
+import Blog from "./Blog";
 
 const StyledCard = styled(Card)`
   margin-bottom: 16px;
@@ -41,8 +42,6 @@ const noteList = [
 ];
 
 export default function Dashboard() {
-  const [isAuth, setIsAuth] = React.useState(cookies.get("auth-token"));
-
   return (
     <>
       <Box
@@ -71,7 +70,7 @@ export default function Dashboard() {
               marginLeft: "16px",
             }}
           >
-            {isAuth}
+            siti khadijah
           </Typography>
         </Box>
       </Box>

@@ -1,22 +1,17 @@
-import { useEffect, useRef } from "react";
+//styles
+import { NotesContainer } from "../../styles/styles";
 
-const useOutsideClick = (handler) => {
-  const nodeRef = useRef();
-  useEffect(() => {
-    const mouseDownHandler = (event) => {
-      if (nodeRef.current && !nodeRef.current.contains(event.target)) {
-        handler();
-      }
-    };
+//component
+import NoteCard from "../NoteCard/NoteCard";
 
-    window.addEventListener("mousedown", mouseDownHandler);
-
-    return () => {
-      window.removeEventListener("mousedown", mouseDownHandler);
-    };
-  }, [handler]);
-
-  return nodeRef;
+const MainWrapper = ({ notes, type }) => {
+  return (
+    <NotesContainer>
+      {notes.map((note) => (
+        <NoteCard key={note.id} note={note} type={type} />
+      ))}
+    </NotesContainer>
+  );
 };
 
-export default useOutsideClick;
+export default MainWrapper;
