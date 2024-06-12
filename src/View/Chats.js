@@ -124,6 +124,34 @@ export default function ChatbotFrontEnd() {
     "Environment",
   ]);
 
+  const [subject, setSubject] = useState([
+    "Science",
+    "Mathematics",
+    "Information Technology",
+  ]);
+
+  const [learningStyle, setLearningStyle] = useState([
+    "Visual",
+    "Verbal",
+    "Active",
+    "Reflective",
+    "Intuitive",
+    "Sensitive",
+    "Sequential",
+    "Global",
+  ]);
+
+  const [lessonPlan, setLessonPlan] = useState([
+    "Lesson Plan",
+    "Exercise",
+    "Teaching Strategies",
+    "Environment",
+  ]);
+
+  const [chooseSubject, setChooseSubject] = useState();
+  const [chooseStyle, setChooseStyle] = useState();
+  const [choosePlan, setChoosePlan] = useState();
+
   const handleSelect = (u) => {
     // setChoice2(["LO", "Exercise", "Teaching Strategies", "Environment"]);
 
@@ -198,8 +226,7 @@ export default function ChatbotFrontEnd() {
   ];
 
   const newChat = async (e) => {
-    const mess =
-      "Hello. Welcome to EduSys. Please choose an learning styles option below?";
+    const mess = "Hello. Welcome to EduSys. Please choose a subject.";
     const ChatId = await addDoc(collection(db, "History"), {
       Username: isAuth,
       Date: serverTimestamp(),
@@ -271,7 +298,7 @@ export default function ChatbotFrontEnd() {
         }}
       >
         {/* <Link to="/Editor" style={{ textDecoration: "none" }}> */}
-         <Link to="/notes" style={{ textDecoration: "none" }}>
+        <Link to="/notes" style={{ textDecoration: "none" }}>
           <Button
             type="submit"
             fullWidth
@@ -294,7 +321,7 @@ export default function ChatbotFrontEnd() {
           </Button>
         </Link>
       </Box>
-      
+
       <Divider />
 
       <List>
@@ -415,6 +442,21 @@ export default function ChatbotFrontEnd() {
     setMessageInput(content);
     setNewMessage(content);
 
+    switch (content) {
+      case subject.includes(content):
+        setChooseSubject(content);
+        break;
+      case learningStyle.includes(content):
+        setChooseStyle(content);
+        break;
+      case lessonPlan.includes(content):
+        setChoosePlan(content);
+        break;
+
+      default:
+        break;
+    }
+
     // TODO: post the request to Back4app
   };
 
@@ -436,12 +478,102 @@ export default function ChatbotFrontEnd() {
     sendMessage(messageInput);
     setMessageInput("");
 
-    if (choice1.includes(messageInput)) {
+    // switch (messageInput) {
+    //   case subject.includes(messageInput):
+    //     setChooseSubject(messageInput);
+    //     break;
+    //   case learningStyle.includes(messageInput):
+    //     setChooseStyle(messageInput);
+    //     break;
+    //   case lessonPlan.includes(messageInput):
+    //     setChoosePlan(messageInput);
+    //     break;
+
+    //   default:
+    //     break;
+    // }
+
+    if (subject.includes(messageInput)) {
+      setChooseSubject(messageInput);
       const response = await axios({
         url: "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyDMd1u72JRH-_T6Fc_8BZP_SOtLo6yNLS4",
         method: "post",
         data: {
-          contents: [{ parts: [{ text: messageInput + " learning style" }] }],
+          contents: [
+            {
+              parts: [
+                {
+                  text: messageInput + " subject in primary school in malaysia",
+                },
+              ],
+            },
+          ],
+        },
+      });
+
+      const ans =
+        response["data"]["candidates"][0]["content"]["parts"][0]["text"];
+
+      await updateDoc(doc(db, "Chats", idl), {
+        messages: arrayUnion({
+          id: uuid(),
+          text: messageInput,
+          senderId: currentUser.uid,
+          date: Timestamp.now(),
+        }),
+      });
+
+      await updateDoc(doc(db, "Chats", idl), {
+        messages: arrayUnion({
+          id: uuid(),
+          text: ans,
+          senderId: 1,
+          date: Timestamp.now(),
+        }),
+      });
+
+      await updateDoc(doc(db, "NewChatwithId", idl), {
+        LastMessage: ans,
+      });
+
+      setMessages([
+        ...messages,
+        {
+          content: messageInput,
+          isCustomer: true,
+        },
+        {
+          content:
+            response["data"]["candidates"][0]["content"]["parts"][0]["text"],
+          isCustomer: false,
+        },
+      ]);
+
+      console.log(
+        response["data"]["candidates"][0]["content"]["parts"][0]["text"]
+      );
+      console.log(answer);
+
+      // return;
+    } else if (learningStyle.includes(messageInput)) {
+      setChooseStyle(messageInput);
+      const response = await axios({
+        url: "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyDMd1u72JRH-_T6Fc_8BZP_SOtLo6yNLS4",
+        method: "post",
+        data: {
+          contents: [
+            {
+              parts: [
+                {
+                  text:
+                    messageInput +
+                    " learning style for " +
+                    chooseSubject +
+                    " subject in primary school in malaysia",
+                },
+              ],
+            },
+          ],
         },
       });
 
@@ -488,11 +620,28 @@ export default function ChatbotFrontEnd() {
       );
       console.log(answer);
       // return;
-    } else {
+    } else if (lessonPlan.includes(messageInput)) {
+      setChoosePlan(messageInput);
       const response = await axios({
         url: "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyDMd1u72JRH-_T6Fc_8BZP_SOtLo6yNLS4",
         method: "post",
-        data: { contents: [{ parts: [{ text: messageInput }] }] },
+        data: {
+          contents: [
+            {
+              parts: [
+                {
+                  text:
+                    messageInput +
+                    " for " +
+                    chooseStyle +
+                    " learning style for " +
+                    chooseSubject +
+                    " subject in primary school in malaysia",
+                },
+              ],
+            },
+          ],
+        },
       });
 
       const ans =
@@ -629,10 +778,19 @@ export default function ChatbotFrontEnd() {
                   // image={message.image}
                   isCustomer={item.senderId === 1 ? false : true}
                   choices={
+                    // input[4].text === "Science" ? subject : lessonPlan
                     item.text ===
-                    "Hello. Welcome to EduSys. Please choose an learning styles option below?"
-                      ? choice1
-                      : choice2
+                    "Hello. Welcome to EduSys. Please choose a subject."
+                      ? // index === 0 ? choice1 : choice2
+
+                        // subject.includes("Science") ? subject : learningStyle
+                        // input[index]
+                        subject
+                      : subject.includes(input[index - 1].text)
+                      ? learningStyle
+                      : learningStyle.includes(input[index - 1].text)
+                      ? lessonPlan
+                      : subject
                   }
                   handleChoice={sendMessage}
                 />
