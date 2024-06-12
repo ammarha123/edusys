@@ -10,9 +10,9 @@ import cover from "../assets/34371991_v228-wit-02a-job58.jpg";
 import AllNotes from "./Notes/pages/AllNotes/AllNotes";
 import { AuthContext } from "../context/authContext.js";
 import Cookies from "universal-cookie";
+import Blog from "./Blog";
 
 const cookies = new Cookies();
-import Blog from "./Blog";
 
 const StyledCard = styled(Card)`
   margin-bottom: 16px;
