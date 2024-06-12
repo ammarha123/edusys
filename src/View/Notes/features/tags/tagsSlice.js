@@ -8,6 +8,7 @@ const initialState = {
     { tag: "learnings", id: v4() },
     { tag: "work", id: v4() },
     { tag: "quotes", id: v4() },
+    { tag: "education", id: v4() },
   ],
 };
 

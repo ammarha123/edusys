@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import cover from '../assets/34371991_v228-wit-02a-job58.jpg'
 import AllNotes from './Notes/pages/AllNotes/AllNotes';
+import Blog from './Blog';
 
 const StyledCard = styled(Card)`
   margin-bottom: 16px;
@@ -79,7 +80,7 @@ export default function Dashboard() {
                     display: 'flex',
                     flexDirection: 'column',
                     flex: 1,
-                  
+                    paddingBottom: '60px',
                     paddingTop: '40px'
                 }}
             >
@@ -197,7 +198,23 @@ export default function Dashboard() {
                         <AllNotes/>
                     </Box>
                 </Box>
-            </Box>
+                </Box>
+                 <Box
+                    sx={{
+                       backgroundColor: '#176087',
+                        borderRadius: '10px',
+                        p: 2,
+                        mx: '90px',
+                        mt: 4,
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center'
+                    }}
+                >
+                    {/* Blog Widget */}
+                    <Blog />
+                </Box>
+         
             </Box>
         </>
     );
