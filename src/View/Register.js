@@ -156,21 +156,6 @@ export default function Register() {
         }
       }
     }
-
-    // try {
-    //   await axios.post(
-    //     "http://localhost:8800/api/controller/auth/register",
-    //     inputs
-    //   );
-    //   setSuccess("Registration successful.");
-    // } catch (err) {
-    //   if (err.response.status === 500)
-    //     setSuccess(
-    //       "Username already exists. Please choose a different username"
-    //     );
-    //   else
-    //     setSuccess("Email already exists. Please choose a different username");
-    // }
   };
 
   console.log(err);
@@ -179,100 +164,12 @@ export default function Register() {
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
 
-  // Input
-  // const [fullName, setfullName] = React.useState("");
-  // const [userName, setUserName] = React.useState("");
-  // const [email, setEmail] = React.useState("");
-  // const [password, setPassword] = React.useState("");
-  // const [confirmPassword, setConfirmPassword] = React.useState("");
-  //   const handleUsername = (event) => {};
-
-  // Input Error
-  // const [emailError, setEmailError] = React.useState(false);
-  // const [passwordError, setPasswordError] = React.useState(false);
-  // const [confirmPasswordError, setConfirmPasswordError] = React.useState(false);
-
-  // Form validity
-  // const [formValid, setFormValid] = React.useState();
-  // const [success, setSuccess] = React.useState();
-
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleClickShowConfirmPassword = () =>
     setShowConfirmPassword((show) => !show);
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
-
-  // const handleEmail = () => {
-  //   console.log(isEmail(email));
-  //   if (!isEmail(email)) {
-  //     setEmailError(true);
-  //     return;
-  //   }
-
-  //   setEmailError(false);
-  // };
-
-  // const handlePassword = () => {
-  //   if (!password || password.length < 6 || password.length > 20) {
-  //     setPasswordError(true);
-  //     return;
-  //   }
-
-  //   setPasswordError(false);
-  // };
-
-  // const handleConfirmPassword = () => {
-  //   if (password !== confirmPassword) {
-  //     setConfirmPasswordError(true);
-  //     return;
-  //   }
-
-  //   setConfirmPasswordError(false);
-  // };
-
-  // const handleSubmit = () => {
-  //   setSuccess(null);
-  //   //First of all Check for Errors
-
-  //   // IF username error is true
-  //   //   if (usernameError || !usernameInput) {
-  //   //     setFormValid(
-  //   //       "Username is set btw 5 - 15 characters long. Please Re-Enter"
-  //   //     );
-  //   //     return;
-  //   //   }
-
-  //   // If Email error is true
-  //   if (emailError || !email) {
-  //     setFormValid("Email is Invalid. Please Re-Enter");
-  //     return;
-  //   }
-
-  //   // If Password error is true
-  //   if (passwordError || !password) {
-  //     setFormValid(
-  //       "Password is set btw 6 - 20 characters long. Please Re-Enter."
-  //     );
-  //     return;
-  //   }
-
-  // if (confirmPasswordError || !confirmPassword) {
-  //   setFormValid("Password does not match. Please Re-Enter");
-  //   return;
-  // }
-  // setFormValid(null);
-
-  //   // Proceed to use the information passed
-  //   console.log("Full Name : " + fullName);
-  //   console.log("Username : " + userName);
-  //   console.log("Email : " + email);
-  //   console.log("Password : " + password);
-  //   console.log("Confirm Password : " + confirmPassword);
-
-  //   //Show Successfull Submittion
-  //   setSuccess("Form Submitted Successfully");
-  // };
 
   return (
     <Grid

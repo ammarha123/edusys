@@ -54,17 +54,6 @@ export default function ForgotPassword() {
 
   const handleSubmit = () => {
     setSuccess(null);
-    //First of all Check for Errors
-
-    // IF username error is true
-    //   if (usernameError || !usernameInput) {
-    //     setFormValid(
-    //       "Username is set btw 5 - 15 characters long. Please Re-Enter"
-    //     );
-    //     return;
-    //   }
-
-    // If Password error is true
     if (passwordError || !password) {
       setFormValid(
         "Password is set btw 6 - 20 characters long. Please Re-Enter."
@@ -123,20 +112,30 @@ export default function ForgotPassword() {
             borderRadius: 1,
           }}
         >
-          <Typography component="h1" variant="h5" sx={{ padding: '20px', margin: '10px', fontFamily:'Calistoga', color:'white'}}>
+          <Typography
+            component="h1"
+            variant="h5"
+            sx={{
+              padding: "20px",
+              margin: "10px",
+              fontFamily: "Calistoga",
+              color: "white",
+            }}
+          >
             Edusys
           </Typography>
 
           <Box
             sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              width: '100%',
+              display: "flex",
+              justifyContent: "space-between",
+              width: "100%",
             }}
           >
-
             <FormGrid sx={{ flexGrow: 1 }}>
-              <FormLabel htmlFor="password" sx={{fontFamily:'Calistoga'}}>Password</FormLabel>
+              <FormLabel htmlFor="password" sx={{ fontFamily: "Calistoga" }}>
+                Password
+              </FormLabel>
               <OutlinedInput
                 id="password"
                 autoComplete="password"
@@ -152,7 +151,9 @@ export default function ForgotPassword() {
           </Box>
           <Box sx={{ display: "flex", width: "100%", padding: "10px" }}>
             <FormGrid sx={{ flexGrow: 1 }}>
-              <FormLabel htmlFor="password" sx={{fontFamily:'Calistoga'}}>Confirm Password</FormLabel>
+              <FormLabel htmlFor="password" sx={{ fontFamily: "Calistoga" }}>
+                Confirm Password
+              </FormLabel>
               <OutlinedInput
                 id="Confirmpassword"
                 autoComplete="Confirmpassword"
@@ -193,7 +194,7 @@ export default function ForgotPassword() {
               "&:hover": {
                 backgroundColor: "#14506E",
               },
-             fontFamily:'Calistoga'
+              fontFamily: "Calistoga",
             }}
             onClick={handleSubmit}
           >
@@ -215,7 +216,7 @@ export default function ForgotPassword() {
             </Stack>
           )}
           <Grid item>
-            <Typography sx={{fontFamily:'Calistoga'}}>
+            <Typography sx={{ fontFamily: "Calistoga" }}>
               Don't have an account?
               <Link to="/Register"> Register here</Link>
             </Typography>

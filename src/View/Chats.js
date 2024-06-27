@@ -43,9 +43,8 @@ import Cookies from "universal-cookie";
 import { ChatContext } from "./ChatContext.js";
 import { v4 as uuid } from "uuid";
 import { AuthContext } from "../context/authContext.js";
-import DashboardIcon from '@mui/icons-material/Dashboard';
+import DashboardIcon from "@mui/icons-material/Dashboard";
 import Avatar from "@mui/material/Avatar";
-
 
 const chatDB = collection(db, "ChatID");
 
@@ -72,8 +71,6 @@ export default function ChatbotFrontEnd() {
       setMobileOpen(!mobileOpen);
     }
   };
-
- 
 
   const [chats, setChatHistory] = React.useState([]);
   const { dispatch } = React.useContext(ChatContext);
@@ -272,7 +269,7 @@ export default function ChatbotFrontEnd() {
   const drawer = (
     <div>
       <Toolbar />
-       
+
       <Divider />
       <Box
         sx={{
@@ -339,7 +336,7 @@ export default function ChatbotFrontEnd() {
         </Link>
       </Box>
 
-       <Box
+      <Box
         sx={{
           display: "flex",
           justifyContent: "center",
@@ -367,7 +364,7 @@ export default function ChatbotFrontEnd() {
               fontSize: "18px",
             }}
           >
-           Dashboard
+            Dashboard
           </Button>
         </Link>
       </Box>
@@ -382,64 +379,37 @@ export default function ChatbotFrontEnd() {
           Chat History
         </Typography>
         {chats.map((item, index) => (
-        <Link key={index} to={`/Chats/${item.Id}`} style={{ textDecoration: "none" }}>
-          <ListItem sx={{ py: 0 }} component="div">
-            <ListItemButton>
-              <ListItemText
-                onClick={() => {
-                  handleSelect(item.Id);
-                  // setidl(item.Id);
-                }}
-                primary={
-                  <Typography component="h8" sx={{ fontFamily: "Calistoga" }}>
-                    {/* {item.Date} */}
-                  </Typography>
-                }
-                secondary={
-                  <Typography variant="body2" sx={{ fontFamily: "Calistoga" }}>
-                    {/* {item.LastMessage} */}
-                    {historyDisplay(item.LastMessage)}
-                  </Typography>
-                }
-              />
-            </ListItemButton>
-          </ListItem>
-        </Link>
+          <Link
+            key={index}
+            to={`/Chats/${item.Id}`}
+            style={{ textDecoration: "none" }}
+          >
+            <ListItem sx={{ py: 0 }} component="div">
+              <ListItemButton>
+                <ListItemText
+                  onClick={() => {
+                    handleSelect(item.Id);
+                    // setidl(item.Id);
+                  }}
+                  primary={
+                    <Typography component="h8" sx={{ fontFamily: "Calistoga" }}>
+                      {/* {item.Date} */}
+                    </Typography>
+                  }
+                  secondary={
+                    <Typography
+                      variant="body2"
+                      sx={{ fontFamily: "Calistoga" }}
+                    >
+                      {/* {item.LastMessage} */}
+                      {historyDisplay(item.LastMessage)}
+                    </Typography>
+                  }
+                />
+              </ListItemButton>
+            </ListItem>
+          </Link>
         ))}
-
-        {/* {Array(chats)
-          ?.sort((a, b) => b[1].date - a[1].date)
-          .map((chat) => (
-            <div
-              className="userChat"
-              key={chat[0]}
-              onClick={() => handleSelect(chat[1].Username)}
-            >
-              <div className="userChatInfo">
-                <span>{chat[0]}</span>
-                <p>{chat[1].LastMessage?.text}</p>
-              </div>
-            </div>
-          ))} */}
-
-        {/* {History.map((item, index) => (
-          <ListItem key={index} sx={{ py: 0 }}>
-            <ListItemButton>
-              <ListItemText
-                primary={
-                  <Typography component="h8" sx={{ fontFamily: "Calistoga" }}>
-                    {item.title}
-                  </Typography>
-                }
-                secondary={
-                  <Typography variant="body2" sx={{ fontFamily: "Calistoga" }}>
-                    {item.date}
-                  </Typography>
-                }
-              />
-            </ListItemButton>
-          </ListItem>
-        ))} */}
       </List>
     </div>
   );
@@ -480,18 +450,6 @@ export default function ChatbotFrontEnd() {
   const [answer, setAnswer] = useState("");
 
   const sendMessage = (content) => {
-    // add the message to the state
-    // setMessages([
-    //   ...messages,
-    //   {
-    //     content: content,
-    //     isCustomer: true,
-    //   },
-    //   {
-    //     content: answer,
-    //     isCustomer: false,
-    //   },
-    // ]);
     setMessageInput(content);
     setNewMessage(content);
 
@@ -509,16 +467,7 @@ export default function ChatbotFrontEnd() {
       default:
         break;
     }
-
-    // TODO: post the request to Back4app
   };
-
-  // const handleSubmit = (event) => {
-  //   event.preventDefault();
-
-  //   sendMessage(messageInput);
-  //   setMessageInput("");
-  // };
 
   const { currentUser } = useContext(AuthContext);
   const { data1 } = useContext(ChatContext);
@@ -530,21 +479,6 @@ export default function ChatbotFrontEnd() {
 
     sendMessage(messageInput);
     setMessageInput("");
-
-    // switch (messageInput) {
-    //   case subject.includes(messageInput):
-    //     setChooseSubject(messageInput);
-    //     break;
-    //   case learningStyle.includes(messageInput):
-    //     setChooseStyle(messageInput);
-    //     break;
-    //   case lessonPlan.includes(messageInput):
-    //     setChoosePlan(messageInput);
-    //     break;
-
-    //   default:
-    //     break;
-    // }
 
     if (subject.includes(messageInput)) {
       setChooseSubject(messageInput);
@@ -745,70 +679,41 @@ export default function ChatbotFrontEnd() {
 
   const [resultData, setResultData] = useState("");
 
-  // const chatDisplay = (c) => {
-  //   let responseArray = c.split("**");
-  //   let newResponse = "";
+  const chatDisplay = (c) => {
+    const sections = c.split("\n").map((section) => section.trim());
 
-  //   if (responseArray[0].length !== 0) {
-  //     return responseArray[0];
-  //   } else {
-  //     for (let i = 0; i < responseArray.length; i++) {
-  //       if (i === 0 || i % 2 !== 1) {
-  //         newResponse += responseArray[i];
-  //       } else {
-  //         newResponse += "<b>" + responseArray[i] + "</b>";
-  //       }
-  //     }
+    const formattedSections = sections.map((section, index) => {
+      // Check if the section is a bullet point with nested bold text
+      if (section.startsWith("* ") && section.includes("**")) {
+        const boldPart = section.match(/\*\*(.*?)\*\*/)[1]; // Extract the bold text
+        const restPart = section.replace(`**${boldPart}**`, "").slice(2).trim(); // Remove the bold text from the section
+        return (
+          <li key={index}>
+            <b>{boldPart}</b>
+            {restPart}
+          </li>
+        );
+      }
+      // Check if the section is a bullet point
+      else if (section.startsWith("* ")) {
+        return <li key={index}>{section.slice(2).trim()}</li>;
+      }
+      // Check if the section has *** or ** formatting
+      else if (section.startsWith("***") && section.endsWith("***")) {
+        return <b key={index}>{section.slice(3, -3).trim()}</b>;
+      } else if (section.startsWith("**") && section.endsWith("**")) {
+        return <b key={index}>{section.slice(2, -2).trim()}</b>;
+      } else {
+        // Handle regular text
+        return <div key={index}>{section}</div>;
+      }
+    });
 
-  //     let newResponse2 = newResponse.split("*").join("</br>");
-  //     let newResponseArray = newResponse2.split(" ");
-  //     for (let i = 0; i < newResponseArray.length; i++) {
-  //       const nextWord = newResponseArray[i];
-  //     }
-  //   }
-  // };
+    // Ensure the formattedSections array correctly renders as React components
+    return <div>{formattedSections}</div>;
+  };
 
-
-const chatDisplay = (c) => {
-  const sections = c.split('\n').map(section => section.trim());
-
-  const formattedSections = sections.map((section, index) => {
-    // Check if the section is a bullet point with nested bold text
-    if (section.startsWith('* ') && section.includes('**')) {
-      const boldPart = section.match(/\*\*(.*?)\*\*/)[1]; // Extract the bold text
-      const restPart = section.replace(`**${boldPart}**`, '').slice(2).trim(); // Remove the bold text from the section
-      return (
-        <li key={index}>
-          <b>{boldPart}</b>{restPart}
-        </li>
-      );
-    } 
-    // Check if the section is a bullet point
-    else if (section.startsWith('* ')) {
-      return (
-        <li key={index}>{section.slice(2).trim()}</li>
-      );
-    }
-    // Check if the section has *** or ** formatting
-    else if (section.startsWith('***') && section.endsWith('***')) {
-      return <b key={index}>{section.slice(3, -3).trim()}</b>;
-    } else if (section.startsWith('**') && section.endsWith('**')) {
-      return <b key={index}>{section.slice(2, -2).trim()}</b>;
-    } else {
-      // Handle regular text
-      return <div key={index}>{section}</div>;
-    }
-  });
-
-  // Ensure the formattedSections array correctly renders as React components
   return (
-    <div>
-      {formattedSections}
-    </div>
-  );
-};
-
-    return (
     <Box Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar
@@ -878,7 +783,6 @@ const chatDisplay = (c) => {
             }}
           >
             <Box sx={{ m: 1, mr: 2 }}>
-              
               {input.map((item, index) => (
                 <Message
                   key={index}

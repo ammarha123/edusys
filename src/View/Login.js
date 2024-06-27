@@ -36,7 +36,6 @@ import { Cookie } from "@mui/icons-material";
 
 const dbref = collection(db, "Auth");
 const cookies = new Cookies();
-// const cookiesName = new Cookies();
 
 const FormGrid = styled("div")(() => ({
   display: "flex",
@@ -50,7 +49,6 @@ export default function Login() {
   });
 
   const [isAuth, setIsAuth] = React.useState(cookies.get("auth-token"));
-  // const [userLogin, setUserLogin] = React.useState(cookies.get("name-token"));
 
   const [err, setErr] = React.useState(false);
   const [success, setSuccess] = React.useState();
@@ -60,8 +58,6 @@ export default function Login() {
   const handleChange = (e) => {
     setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
-
-  // console.log(inputs);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -84,18 +80,6 @@ export default function Login() {
     } else {
       setSuccess("Wrong email or password.");
     }
-
-    // try {
-    //   await axios.post(
-    //     "http://localhost:8800/api/controller/auth/login",
-    //     inputs
-    //   );
-    //   navigate("/Dashboard");
-    //   setSuccess("Login successful.");
-    // } catch (err) {
-    //   console.log(err.response.status);
-    //   setSuccess("Wrong email or password!");
-    // }
   };
 
   const googleLogin = async (e) => {
@@ -118,66 +102,12 @@ export default function Login() {
     }
   };
 
-  // console.log(err);
-
-  // Delete
   const [showPassword, setShowPassword] = React.useState(false);
-
-  // // Input
-  // const [userName, setUserName] = React.useState("");
-  // const [password, setPassword] = React.useState("");
-  // //   const handleUsername = (event) => {};
-
-  // // Input error
-  // const [usernameError, setUsernameError] = React.useState(false);
-  // const [passwordError, setPasswordError] = React.useState(false);
-
-  // // Form validity
-  // const [formValid, setFormValid] = React.useState();
-  // const [success, setSuccess] = React.useState();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
-
-  // const handlePassword = () => {
-  //   if (!password || password.length < 6 || password.length > 20) {
-  //     setPasswordError(true);
-  //     return;
-  //   }
-
-  //   setPasswordError(false);
-  // };
-
-  // const handleSubmit = () => {
-  //   setSuccess(null);
-  //   //First of all Check for Errors
-
-  //   // IF username error is true
-  //   //   if (usernameError || !usernameInput) {
-  //   //     setFormValid(
-  //   //       "Username is set btw 5 - 15 characters long. Please Re-Enter"
-  //   //     );
-  //   //     return;
-  //   //   }
-
-  //   // If Password error is true
-  //   if (passwordError || !password) {
-  //     setFormValid(
-  //       "Password is set btw 6 - 20 characters long. Please Re-Enter."
-  //     );
-  //     return;
-  //   }
-
-  //   setFormValid(null);
-  //   // Proceed to use the information passed
-  //   console.log("Username : " + userName);
-  //   console.log("Password : " + password);
-
-  //   //Show Successfull Submittion
-  //   setSuccess("Form Submitted Successfully");
-  // };
 
   if (!isAuth) {
     return (
@@ -245,10 +175,6 @@ export default function Login() {
                   placeholder=""
                   required
                   onChange={handleChange}
-                  // value={userName}
-                  // onChange={(event) => {
-                  //   setUserName(event.target.value);
-                  // }}
                   sx={{ backgroundColor: "white", width: "100%" }}
                 />
               </FormGrid>
@@ -265,13 +191,7 @@ export default function Login() {
                   placeholder=""
                   required
                   onChange={handleChange}
-                  // value={password}
-                  // error={passwordError}
-                  // onBlur={handlePassword}
                   type={showPassword ? "text" : "password"}
-                  // onChange={(event) => {
-                  //   setPassword(event.target.value);
-                  // }}
                   sx={{ backgroundColor: "white", width: "100%" }}
                   endAdornment={
                     <InputAdornment position="end">
@@ -295,19 +215,6 @@ export default function Login() {
                 justifyContent: "center",
               }}
             >
-              {/* <GoogleLogin
-              onSuccess={(credentialResponse) => {
-                const credentialResponseDecoded = jwtDecode(
-                  credentialResponse.credential
-                );
-                console.log(credentialResponseDecoded);
-                navigate("/Dashboard");
-              }}
-              onError={() => {
-                console.log("Login Failed");
-              }}
-            /> */}
-
               <Button
                 type="submit"
                 fullWidth
@@ -360,13 +267,6 @@ export default function Login() {
             >
               Login
             </Button>
-            {/* {formValid && (
-            <Stack sx={{ width: "100%", paddingTop: "10px" }} spacing={2}>
-              <Alert severity="error" size="small">
-                {formValid}
-              </Alert>
-            </Stack>
-          )} */}
 
             {success && (
               <Stack sx={{ width: "100%", paddingTop: "10px" }} spacing={2}>

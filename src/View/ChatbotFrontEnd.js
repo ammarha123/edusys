@@ -225,29 +225,8 @@ export default function ChatbotFrontEnd() {
   const [answer, setAnswer] = useState("");
 
   const sendMessage = (content) => {
-    // add the message to the state
-    // setMessages([
-    //   ...messages,
-    //   {
-    //     content: content,
-    //     isCustomer: true,
-    //   },
-    //   {
-    //     content: answer,
-    //     isCustomer: false,
-    //   },
-    // ]);
     setMessageInput(content);
-
-    // TODO: post the request to Back4app
   };
-
-  // const handleSubmit = (event) => {
-  //   event.preventDefault();
-
-  //   sendMessage(messageInput);
-  //   setMessageInput("");
-  // };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
