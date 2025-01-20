@@ -45,7 +45,7 @@ export default function Home() {
             variant="h4"
             sx={{ fontFamily: "Calistoga", color: "white" }}
           >
-            Our AI Chatbot
+            Our AI Chatbots
           </Typography>
           <Link to="/Login" style={{ textDecoration: "none" }}>
             <Button
